@@ -1,5 +1,11 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/android
+# Edit at https://www.toptal.com/developers/gitignore?templates=android
+
+### Android ###
 # Built application files
 *.apk
+*.aar
 *.ap_
 *.aab
 
@@ -13,7 +19,8 @@
 bin/
 gen/
 out/
-release/
+#  Uncomment the following line in case you need and you don't have the release build type files in your app
+# release/
 
 # Gradle files
 .gradle/
@@ -55,6 +62,7 @@ captures/
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
+.cxx/
 
 # Google Services (e.g. APIs or Firebase)
 # google-services.json
@@ -80,3 +88,13 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+### Android Patch ###
+gen-external-apklibs
+output.json
+
+# Replacement of .externalNativeBuild directories introduced
+# with Android Studio 3.5.
+
+# End of https://www.toptal.com/developers/gitignore/api/android
+
