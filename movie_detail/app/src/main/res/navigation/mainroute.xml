@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/mainroute">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainroute"
+    app:startDestination="@id/movieDetails">
 
+    <fragment
+        android:id="@+id/movieDetails"
+        android:name="com.example.movie_detail.Views.MovieDetails.MovieDetails"
+        android:label="MovieDetails"
+        tools:layout="@layout/movie_details"
+        />
 </navigation>
