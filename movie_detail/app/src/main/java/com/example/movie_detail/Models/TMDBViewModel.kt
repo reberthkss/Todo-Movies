@@ -29,6 +29,13 @@ class TMDBViewModel() : ViewModel() {
         }
     } // TODO - Implement
 
-    fun loadSimilarMoviesById(movieId: String): Unit {} // TODO - Implement
+    fun loadSimilarMoviesById(movieId: String): Unit {
+        // TODO - Error handling
+        coroutineScope.launch {
+            if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
+                theMovieDatabaseRepository.getSimilarMovies(movieId);
+            }
+        }
+    }
     fun getData(): LiveData<Any>{return data} // TODO - Implement
 }
