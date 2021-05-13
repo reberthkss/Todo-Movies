@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.movie_detail.Models.TMDBViewModel
 import com.example.movie_detail.R
@@ -25,12 +26,18 @@ class MovieDetails : Fragment() {
         Log.d("MovieDetails", "Hello world from movie details!");
         viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
+        theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
+            // TODO - Implement
+        })
+        theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
+            // TODO - Implement
+        })
         return viewBinding.root;
     }
 
     override fun onStart() {
         super.onStart()
-        theMovieDatabaseViewModel.loadMovieDetailsById("550");
+        theMovieDatabaseViewModel.loadDataOfMovieId("550");
     }
 
     override fun onPause() {
