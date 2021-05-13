@@ -35,9 +35,13 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
         val detailOfMovies: MutableList<MovieDetailsDataclasse> = mutableListOf();
         listOfMoviesId.forEach {movieId: SimilarMovieDataclasse ->
             val movieDetails = getMovieDetail(movieId.id)
-            detailOfMovies.plus(movieDetails)
             detailOfMovies.add(movieDetails)
         }
         detailOfMovies;
+    }
+
+    suspend fun getResourcesConfiguration() = withContext(Dispatchers.IO) {
+        val resourcesServerConfig = api.getResourcesConfig(apiKey).await()
+        resourcesServerConfig
     }
 }
