@@ -32,10 +32,11 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
     }
 
     suspend fun getMovieDetailsFromList(listOfMoviesId: List<SimilarMovieDataclasse>) = withContext(Dispatchers.IO) {
-        val detailOfMovies: List<MovieDetailsDataclasse> = listOf();
+        val detailOfMovies: MutableList<MovieDetailsDataclasse> = mutableListOf();
         listOfMoviesId.forEach {movieId: SimilarMovieDataclasse ->
             val movieDetails = getMovieDetail(movieId.id)
             detailOfMovies.plus(movieDetails)
+            detailOfMovies.add(movieDetails)
         }
         detailOfMovies;
     }
