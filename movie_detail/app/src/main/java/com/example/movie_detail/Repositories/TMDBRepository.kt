@@ -1,10 +1,9 @@
 package com.example.movie_detail.Repositories
 
-import android.provider.Settings.Global.getString
 import android.util.Log
-import com.example.movie_detail.Dataclasses.GetSimilarMoviesResponse
+import com.example.movie_detail.Dataclasses.MovieDetailsDataclasse
+import com.example.movie_detail.Dataclasses.SimilarMovieDataclasse
 import com.example.movie_detail.Network.TMDBapi
-import com.example.movie_detail.R
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,16 +22,14 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
     }
 
     suspend fun getMovieDetail(movieId: String) = withContext(Dispatchers.IO) {
-        val response = api.loadMovieId(movieId, apiKey).await();
-        Log.d("MovieDetailsRepository", "data => ${response}");
+        val movieDetail = api.loadMovieId(movieId, apiKey).await();
+        movieDetail;
     }
 
     suspend fun getIdOfSimilarMovies(movieId: String) = withContext(Dispatchers.IO) {
-        val request = api.loadSimilarMovies(movieId, apiKey);
-        request.enqueue(object: Callback<GetSimilarMoviesResponse> {
-            override fun onFailure(call: Call<GetSimilarMoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
+        val listOfIds = api.loadSimilarMovies(movieId, apiKey).await()
+        listOfIds
+    }
 
             override fun onResponse(
                 call: Call<GetSimilarMoviesResponse>,
