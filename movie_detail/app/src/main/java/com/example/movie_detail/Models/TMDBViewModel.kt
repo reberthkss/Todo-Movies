@@ -1,5 +1,6 @@
 package com.example.movie_detail.Models
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,7 +34,8 @@ class TMDBViewModel() : ViewModel() {
         // TODO - Error handling
         coroutineScope.launch {
             if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
-                theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
+                val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
+                theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results)
             }
         }
     }
