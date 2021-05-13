@@ -28,5 +28,7 @@ class TMDBViewModel() : ViewModel() {
             }
         }
     } // TODO - Implement
+
+    fun loadSimilarMoviesById(movieId: String): Unit {} // TODO - Implement
     fun getData(): LiveData<Any>{return data} // TODO - Implement
 }
