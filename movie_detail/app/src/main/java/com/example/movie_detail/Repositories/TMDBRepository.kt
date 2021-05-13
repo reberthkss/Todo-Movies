@@ -27,7 +27,7 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
         Log.d("MovieDetailsRepository", "data => ${response}");
     }
 
-    suspend fun getSimilarMovies(movieId: String) = withContext(Dispatchers.IO) {
+    suspend fun getIdOfSimilarMovies(movieId: String) = withContext(Dispatchers.IO) {
         val request = api.loadSimilarMovies(movieId, apiKey);
         request.enqueue(object: Callback<GetSimilarMoviesResponse> {
             override fun onFailure(call: Call<GetSimilarMoviesResponse>, t: Throwable) {

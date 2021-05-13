@@ -33,7 +33,7 @@ class TMDBViewModel() : ViewModel() {
         // TODO - Error handling
         coroutineScope.launch {
             if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
-                theMovieDatabaseRepository.getSimilarMovies(movieId);
+                theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
             }
         }
     }
