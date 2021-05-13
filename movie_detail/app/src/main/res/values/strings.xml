@@ -2,4 +2,5 @@
     <string name="app_name">movie_detail</string>
     <string name="THE_MOVIE_DB_BASE_URL">https://api.themoviedb.org/3/</string>
     <string name="THE_MOVIE_DB_API_KEY">bd1207cb829b5acfe18475e528463649</string>
+    <string name="THE_MOVIE_DB_DEFAULT_SIZE">w500</string>
 </resources>
