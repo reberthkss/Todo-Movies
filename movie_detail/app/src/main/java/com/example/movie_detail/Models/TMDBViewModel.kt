@@ -7,9 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.movie_detail.Dataclasses.SimpleMovieData
 import com.example.movie_detail.Dataclasses.TMDBResourceConfig
 import com.example.movie_detail.Repositories.TMDBRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class TMDBViewModel() : ViewModel() {
@@ -47,7 +44,7 @@ class TMDBViewModel() : ViewModel() {
         }
     }
 
-    fun getMovieDetails(): LiveData<SimpleMovieData?>{return movieSimpleData};
+    fun getMovieDetails(): LiveData<SimpleMovieData?> {return movieSimpleData};
     fun getLoadingStatus(): LiveData<Boolean> {return isLoading};
     fun getResourceServerConfig(): LiveData<TMDBResourceConfig?> {return resourcesServerConfiguration};
 }
