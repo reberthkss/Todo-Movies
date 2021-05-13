@@ -12,7 +12,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class TMDBViewModel() : ViewModel() {
-    private val movieSimpleData: MutableLiveData<SimpleMovieData> = MutableLiveData()
+    private val movieSimpleData: MutableLiveData<SimpleMovieData> = MutableLiveData(SimpleMovieData())
     private lateinit var theMovieDatabaseRepository: TMDBRepository
     private var isLoading: MutableLiveData<Boolean> = MutableLiveData(false);
 
@@ -30,11 +30,11 @@ class TMDBViewModel() : ViewModel() {
                 val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
                 val similarMovies = theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results);
                 // Save data
-                movieSimpleData.value?.movieDetails = movieDetails;
-                movieSimpleData.value?.similarMovies = similarMovies;
+                movieSimpleData.value = SimpleMovieData(movieDetails, similarMovies)
                 isLoading.value = false
             }
         }
     }
-    fun getMovieDetails(): LiveData<SimpleMovieData>{return movieSimpleData} // TODO - Implement
+    fun getMovieDetails(): LiveData<SimpleMovieData>{return movieSimpleData}
+    fun getLoadingStatus(): LiveData<Boolean> {return isLoading};
 }
