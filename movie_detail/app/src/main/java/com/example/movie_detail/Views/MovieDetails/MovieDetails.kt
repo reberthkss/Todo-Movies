@@ -29,7 +29,12 @@ class MovieDetails : Fragment() {
         theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
             // TODO - Implement
         })
+
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
+            // TODO - Implement
+        })
+
+        theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
             // TODO - Implement
         })
         return viewBinding.root;
@@ -37,6 +42,7 @@ class MovieDetails : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        theMovieDatabaseViewModel.loadResourcesServerConfig();
         theMovieDatabaseViewModel.loadDataOfMovieId("550");
     }
 
