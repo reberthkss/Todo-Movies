@@ -1,6 +1,5 @@
 package com.example.movie_detail.Repositories
 
-import android.util.Log
 import com.example.movie_detail.Dataclasses.MovieDetailsDataclasse
 import com.example.movie_detail.Dataclasses.SimilarMovieDataclasse
 import com.example.movie_detail.Network.TMDBapi
@@ -41,7 +40,11 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
     }
 
     suspend fun getResourcesConfiguration() = withContext(Dispatchers.IO) {
-        val resourcesServerConfig = api.getResourcesConfig(apiKey).await()
-        resourcesServerConfig
+        try {
+            val resourcesServerConfig = api.getResourcesConfig(apiKey).await()
+            resourcesServerConfig
+        } catch (e: Exception) {
+            null
+        }
     }
 }
