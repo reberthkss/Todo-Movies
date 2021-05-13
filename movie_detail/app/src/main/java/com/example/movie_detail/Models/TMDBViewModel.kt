@@ -1,9 +1,9 @@
 package com.example.movie_detail.Models
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.movie_detail.Dataclasses.SimpleMovieData
 import com.example.movie_detail.Repositories.TMDBRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,9 +11,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class TMDBViewModel() : ViewModel() {
-    private val data: MutableLiveData<Any> = MutableLiveData<Any>()// TODO - Create data class
+    private val movieSimpleData: MutableLiveData<SimpleMovieData> = MutableLiveData()
     private lateinit var theMovieDatabaseRepository: TMDBRepository
-    private var isLoading: Boolean = false;
+    private var isLoading: MutableLiveData<Boolean> = MutableLiveData(false);
     private val supervisorJob = SupervisorJob();
     private val coroutineScope = CoroutineScope(Dispatchers.Main + supervisorJob);
 
@@ -21,23 +21,21 @@ class TMDBViewModel() : ViewModel() {
         theMovieDatabaseRepository = TMDBRepository(baseUrl, apiKey);
     }
 
-    fun loadMovieDetailsById(movieId: String): Unit {
-//        TODO - Error handling
-        coroutineScope.launch {
-            if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
-                theMovieDatabaseRepository.getMovieDetail(movieId);
-            }
-        }
-    } // TODO - Implement
-
-    fun loadSimilarMoviesById(movieId: String): Unit {
+    public fun loadDataOfMovieId(movieId: String): Unit {
+        isLoading.value = true
         // TODO - Error handling
         coroutineScope.launch {
             if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
+                // Load data
+                val movieDetails = theMovieDatabaseRepository.getMovieDetail(movieId);
                 val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
-                theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results)
+                val similarMovies = theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results);
+                // Save data
+                movieSimpleData.value?.movieDetails = movieDetails;
+                movieSimpleData.value?.similarMovies = similarMovies;
             }
         }
+        isLoading.value = false
     }
-    fun getData(): LiveData<Any>{return data} // TODO - Implement
+    fun getMovieDetails(): LiveData<SimpleMovieData>{return movieSimpleData} // TODO - Implement
 }
