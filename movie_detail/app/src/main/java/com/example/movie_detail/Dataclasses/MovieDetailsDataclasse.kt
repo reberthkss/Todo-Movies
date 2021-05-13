@@ -8,5 +8,5 @@ data class MovieDetailsDataclasse(
     @field:Json(name = "title") val title: String,
     @field:Json(name = "poster_path") val imageUrl: String,
     @field:Json(name = "release_date") val releaseDate: String,
-    @field:Json(name = "genre_ids") val genresIds: List<String>
+    @field:Json(name = "genres") val genres: List<MovieGenre>
 );
