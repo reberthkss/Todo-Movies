@@ -31,12 +31,12 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
         listOfIds
     }
 
-            override fun onResponse(
-                call: Call<GetSimilarMoviesResponse>,
-                response: Response<GetSimilarMoviesResponse>
-            ) {
-                TODO("Not yet implemented")
-            }
-        })
+    suspend fun getMovieDetailsFromList(listOfMoviesId: List<SimilarMovieDataclasse>) = withContext(Dispatchers.IO) {
+        val detailOfMovies: List<MovieDetailsDataclasse> = listOf();
+        listOfMoviesId.forEach {movieId: SimilarMovieDataclasse ->
+            val movieDetails = getMovieDetail(movieId.id)
+            detailOfMovies.plus(movieDetails)
+        }
+        detailOfMovies;
     }
 }
