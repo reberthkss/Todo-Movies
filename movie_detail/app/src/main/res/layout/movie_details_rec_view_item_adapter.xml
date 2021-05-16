@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="isFavorite"
+            type="Boolean"/>
+        <variable
+            name="movieTitle"
+            type="String" />
+        <variable
+            name="movieDescription"
+            type="String" />
+        <variable
+            name="movieImageUrl"
+            type="String" />
+        <variable
+            name="resourcesBaseUrl"
+            type="String" />
+    </data>
+    <LinearLayout
+        android:id="@+id/movie_card_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:baselineAligned="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginRight="15dp"
+        >
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:imageUrl="@{movieImageUrl}"
+                app:baseUrl="@{resourcesBaseUrl != null ? resourcesBaseUrl : @string/THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL}"
+                app:imageSize="@{@string/THE_MOVIE_DB_DEFAULT_SIZE}"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="end"
+                >
+                <ImageView
+                    android:id="@+id/checked_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_check_circle_black_24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="visible"
+                    app:tint="@android:color/white"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{movieTitle, default=`Filme A`}"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{movieDescription, default=`Descrição filme A`}"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>
