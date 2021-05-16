@@ -10,8 +10,8 @@ import com.example.movie_detail.Repositories.TMDBRepository
 import kotlinx.coroutines.launch
 
 class TMDBViewModel() : ViewModel() {
-    private val resourcesServerConfiguration: MutableLiveData<TMDBResourceConfig?> = MutableLiveData(null)
-    private val movieSimpleData: MutableLiveData<SimpleMovieData?> = MutableLiveData(null)
+    private val resourcesServerConfiguration: MutableLiveData<TMDBResourceConfig?> = MutableLiveData(null);
+    private val movieSimpleData: MutableLiveData<SimpleMovieData?> = MutableLiveData(null);
     private lateinit var theMovieDatabaseRepository: TMDBRepository
     private var isLoading: MutableLiveData<Boolean> = MutableLiveData(false);
 

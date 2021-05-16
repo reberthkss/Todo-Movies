@@ -27,8 +27,18 @@ class MovieDetails : Fragment() {
         viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
         theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
-            // TODO - Implement
-        })
+            val similarMovies = it?.similarMovies ?: listOf();
+            viewBinding.votesCount = it?.movieDetails?.voteCount.toString() ?: "0";
+            viewBinding.moviePopularity = it?.movieDetails?.popularity ?: 0f;
+            viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;
+            viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
+                override fun onClickMovie(position: Int) {
+                    Log.d("Fragment", " Updating favorite value...");
+                    theMovieDatabaseViewModel.updateWatchedStatus(position);
+                    viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
+                }
+            });
+        });
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
             // TODO - Implement
