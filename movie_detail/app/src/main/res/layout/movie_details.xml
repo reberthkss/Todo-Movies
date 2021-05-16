@@ -8,7 +8,7 @@
             type="String" />
         <variable
             name="moviePopularity"
-            type="float" />
+            type="String" />
         <variable
             name="movieImageEndpoint"
             type="String"
@@ -107,7 +107,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{votesCount}"
+                            android:text="@{@string/MOVIE_LIKES(votesCount)}"
                             />
                     </LinearLayout>
                     <LinearLayout

@@ -4,5 +4,6 @@
     <string name="THE_MOVIE_DB_API_KEY">bd1207cb829b5acfe18475e528463649</string>
     <string name="THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL">https://image.tmdb.org/t/p/</string>
     <string name="THE_MOVIE_DB_DEFAULT_SIZE">w500</string>
-    <string name="POPULARITY_VIEWS">%f views</string>
+    <string name="MOVIE_LIKES">%s likes</string>
+    <string name="POPULARITY_VIEWS">%s views</string>
 </resources>

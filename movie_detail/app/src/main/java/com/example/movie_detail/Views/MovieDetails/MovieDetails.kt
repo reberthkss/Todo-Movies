@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.movie_detail.Models.TMDBViewModel
 import com.example.movie_detail.R
+import com.example.movie_detail.Utils.NumberFormatters
 import com.example.movie_detail.Views.MovieDetails.Lists.ISimilarMoviesAdapterCallbacks
 import com.example.movie_detail.Views.MovieDetails.Lists.SimilarMoviesAdapter
 import com.example.movie_detail.databinding.MovieDetailsBinding
@@ -23,13 +24,16 @@ class MovieDetails : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("MovieDetails", "Hello world from movie details!");
         viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
         theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
             val similarMovies = it?.similarMovies ?: listOf();
-            viewBinding.votesCount = it?.movieDetails?.voteCount.toString() ?: "0";
-            viewBinding.moviePopularity = it?.movieDetails?.popularity ?: 0f;
+            val votesCount: Long = it?.movieDetails?.voteCount?.toLong() ?: 0L;
+            val popularity: Long = it?.movieDetails?.popularity?.toLong() ?: 0L;
+            Log.d("Fragment", "votes count => ${votesCount}");
+            Log.d("Fragment", "popularity => ${popularity}");
+            viewBinding.votesCount = NumberFormatters.getFormatedNumber(votesCount);
+            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(popularity);
             viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;
             viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
                 override fun onClickMovie(position: Int) {
@@ -46,7 +50,6 @@ class MovieDetails : Fragment() {
 
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
             theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL);
-            Log.d("Fragment", "base url => ${theMovieDbResourcesUrl}")
         });
 
         theMovieDatabaseViewModel.getFavoriteStatus().observe(viewLifecycleOwner, Observer {
