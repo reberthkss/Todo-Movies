@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 class TMDBViewModel() : ViewModel() {
     private val resourcesServerConfiguration: MutableLiveData<TMDBResourceConfig?> = MutableLiveData(null);
     private val movieSimpleData: MutableLiveData<SimpleMovieData?> = MutableLiveData(null);
+    private val movieIsFavorite: MutableLiveData<Boolean> = MutableLiveData(false);
     private lateinit var theMovieDatabaseRepository: TMDBRepository
     private var isLoading: MutableLiveData<Boolean> = MutableLiveData(false);
 
@@ -44,7 +45,21 @@ class TMDBViewModel() : ViewModel() {
         }
     }
 
+    fun updateWatchedStatus(position: Int) {
+        if (movieSimpleData.value != null) {
+            movieSimpleData.value!!.similarMovies[position].updateAlreadyWatchedValue();
+        }
+    }
+
+    fun updateFavoriteStatus() {
+        if (movieSimpleData.value != null) {
+            movieSimpleData.value!!.movieDetails?.updateFavoriteValue();
+            movieIsFavorite.value = movieSimpleData.value!!.movieDetails?.favorite ?: false;
+        }
+    }
+
     fun getMovieDetails(): LiveData<SimpleMovieData?> {return movieSimpleData};
     fun getLoadingStatus(): LiveData<Boolean> {return isLoading};
     fun getResourceServerConfig(): LiveData<TMDBResourceConfig?> {return resourcesServerConfiguration};
+    fun getFavoriteStatus(): LiveData<Boolean> {return movieIsFavorite};
 }
