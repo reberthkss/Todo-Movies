@@ -59,6 +59,12 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$version_glide"
     annotationProcessor "com.github.bumptech.glide:compiler:$version_glide"
 
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
