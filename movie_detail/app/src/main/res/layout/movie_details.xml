@@ -1,32 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="votesCount"
+            type="String" />
+        <variable
+            name="moviePopularity"
+            type="float" />
+        <variable
+            name="movieImageEndpoint"
+            type="String"
+            />
+        <variable
+            name="resourcesBaseUrl"
+            type="String" />
+        <variable
+            name="isFavorite"
+            type="Boolean" />
+    </data>
     <LinearLayout
+        android:id="@+id/movie_details_root_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
         <LinearLayout
-            android:id="@+id/movie_details_root_container"
+            android:id="@+id/movie_poster_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                app:imageUrl="@{movieImageEndpoint}"
+                app:baseUrl="@{resourcesBaseUrl != null ? resourcesBaseUrl : @string/THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL}"
+                app:imageSize="@{@string/THE_MOVIE_DB_DEFAULT_SIZE}"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/movie_details_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical"
             >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-                <ImageView
-                    android:id="@+id/imageView"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="15dp"
+                >
+                <LinearLayout
+                    android:id="@+id/movie_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:imageUrl="@{`https://is4-ssl.mzstatic.com/image/thumb/Purple114/v4/97/0e/e2/970ee217-13cf-1674-b016-461aca657663/pr_source.png/460x0w.png`}"
-                    />
+                    android:orientation="horizontal"
+                    android:baselineAligned="false"
+                    >
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="The very best of johnny deep"
+                            />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        >
+                        <ImageView
+                            android:id="@+id/heart_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:src="@{isFavorite ? @drawable/ic_favorite_black_24dp : @drawable/ic_favorite_border_black_24dp}"
+                            app:tint="@android:color/white"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        >
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_favorite_black_24dp"
+                            android:layout_marginRight="10dp"
+                            app:tint="@android:color/white"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{votesCount}"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_visibility_black_24dp"
+                            android:layout_marginRight="10dp"
+                            app:tint="@android:color/white"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{@string/POPULARITY_VIEWS(moviePopularity)}"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                >
-
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/similar_movies_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:spanCount="1"
+                    tools:listitem="@layout/movie_details_rec_view_item_adapter"
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

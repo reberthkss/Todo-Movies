@@ -8,16 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.movie_detail.Models.TMDBViewModel
 import com.example.movie_detail.R
-import com.example.movie_detail.Repositories.TMDBRepository
+import com.example.movie_detail.Views.MovieDetails.Lists.ISimilarMoviesAdapterCallbacks
+import com.example.movie_detail.Views.MovieDetails.Lists.SimilarMoviesAdapter
 import com.example.movie_detail.databinding.MovieDetailsBinding
 
 class MovieDetails : Fragment() {
     lateinit var viewBinding: MovieDetailsBinding
-    private val theMovieDatabaseViewModel: TMDBViewModel by activityViewModels()
-
+    private val theMovieDatabaseViewModel: TMDBViewModel by activityViewModels();
+    private var theMovieDbResourcesUrl: String? = null;
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,11 +42,20 @@ class MovieDetails : Fragment() {
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
             // TODO - Implement
-        })
+        });
 
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
-            // TODO - Implement
+            theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL);
+            Log.d("Fragment", "base url => ${theMovieDbResourcesUrl}")
+        });
+
+        theMovieDatabaseViewModel.getFavoriteStatus().observe(viewLifecycleOwner, Observer {
+            viewBinding.isFavorite = it;
         })
+
+        viewBinding.heartIcon.setOnClickListener {
+            theMovieDatabaseViewModel.updateFavoriteStatus();
+        }
         return viewBinding.root;
     }
 
