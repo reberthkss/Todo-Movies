@@ -1,10 +1,12 @@
 package com.example.movie_detail.Repositories
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.example.movie_detail.Network.Genre.MovieGenreApi
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
+import com.example.movie_detail.R
 import com.example.movie_detail.Room.Database
 import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
@@ -15,6 +17,7 @@ import retrofit2.*
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class TMDBRepository(baseUrl: String, private val apiKey: String, val context: Context) {
+    private val TAG = TMDBRepository::class.toString()
     private val moshi = Moshi.Builder().build();
     private val api by lazy {
         Retrofit
@@ -34,7 +37,10 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
     suspend fun getMovieDetailsById(movieId: String) = withContext(Dispatchers.IO) {
         val movieDetail = api.loadMovieById(movieId, apiKey).await();
         movieDetail?.apply {
-            val movieEntity = MovieEntity.fromApi(this)
+            val movieEntity = MovieEntity.fromApi(this);
+
+            // TODO - Make the cross reference
+
             database.movie().insertOneMovie(movieEntity);
         }
     }
