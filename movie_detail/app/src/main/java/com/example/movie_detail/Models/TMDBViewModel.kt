@@ -31,6 +31,7 @@ class TMDBViewModel() : ViewModel() {
             if (this::theMovieDatabaseRepository.isInitialized) {
                 viewModelScope.launch {
                     theMovieDatabaseRepository.getMovieDetailsById(movieId);
+                    theMovieDatabaseRepository.getSimilarlyMoviesOfId(movieId);
                 }
             }
         } catch (e: Exception) {
@@ -63,6 +64,17 @@ class TMDBViewModel() : ViewModel() {
         }
     }
 
+    fun loadMovieDetails(movieId: String) {
+        try {
+            isLoading.value = true;
+            loadResourcesServerConfig();
+            loadDataOfMovieId("509");
+            loadGenres();
+            isLoading.value = false;
+        } catch (e: Exception) {
+            Log.d(TAG, e.message.toString());
+        }
+    }
     fun updateWatchedStatus(position: Int) {
         try {
 

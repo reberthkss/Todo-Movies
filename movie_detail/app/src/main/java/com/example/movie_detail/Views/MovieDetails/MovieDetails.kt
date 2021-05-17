@@ -115,7 +115,6 @@ class MovieDetails : Fragment() {
     }
 
     fun requestData() {
-        theMovieDatabaseViewModel.loadResourcesServerConfig();
-        theMovieDatabaseViewModel.loadDataOfMovieId("509");
+        theMovieDatabaseViewModel.loadMovieDetails("509");
     }
 }
