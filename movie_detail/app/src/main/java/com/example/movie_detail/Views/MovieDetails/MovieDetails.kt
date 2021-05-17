@@ -47,6 +47,7 @@ class MovieDetails : Fragment() {
         super.onResume()
         try {
             requestData();
+            Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
         } catch (e: Exception) {
             // Display message and try to show the movie detail data
             val movieOverview = theMovieDatabaseViewModel.getMovieDetails().value;
