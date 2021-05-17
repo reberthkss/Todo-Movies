@@ -47,7 +47,6 @@ class MovieDetails : Fragment() {
         super.onResume()
         try {
             requestData();
-            Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
         } catch (e: Exception) {
             // Display message and try to show the movie detail data
             val movieOverview = theMovieDatabaseViewModel.getMovieDetails().value;
@@ -86,6 +85,9 @@ class MovieDetails : Fragment() {
                     viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
                 }
             });
+            if (it != null) {
+                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
+            }
         });
 
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
