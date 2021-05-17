@@ -1,4 +1,4 @@
-package com.example.movie_detail.Room.Entities.Movies
+package com.example.movie_detail.Room.Entities.Movie
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

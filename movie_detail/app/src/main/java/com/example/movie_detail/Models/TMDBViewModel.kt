@@ -26,7 +26,7 @@ class TMDBViewModel() : ViewModel() {
             if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
                 isLoading.value = true
                 // Load data
-                val movieDetails = theMovieDatabaseRepository.getMovieDetail(movieId);
+                val movieDetails = theMovieDatabaseRepository.getMovieDetailsById(movieId);
                 val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
                 val similarMovies = theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results);
                 // Save data
