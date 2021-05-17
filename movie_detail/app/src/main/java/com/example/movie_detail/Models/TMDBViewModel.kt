@@ -10,6 +10,7 @@ import com.example.movie_detail.Dataclasses.SimpleMovieData
 import com.example.movie_detail.Dataclasses.TMDBResourceConfig
 import com.example.movie_detail.Repositories.TMDBRepository
 import com.example.movie_detail.Utils.Feedback
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -25,9 +26,25 @@ class TMDBViewModel() : ViewModel() {
         theMovieDatabaseRepository = TMDBRepository(baseUrl, apiKey, ctx);
     }
 
-    fun loadDataOfMovieId(movieId: String): Unit {
+    fun loadDataOfMovieId(movieId: String) {
         try {
+            if (this::theMovieDatabaseRepository.isInitialized) {
+                viewModelScope.launch {
+                    theMovieDatabaseRepository.getMovieDetailsById(movieId);
+                }
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, e.message.toString())
+        }
+    }
 
+    fun loadGenres() {
+        try {
+            if (this::theMovieDatabaseRepository.isInitialized) {
+                viewModelScope.launch {
+                    theMovieDatabaseRepository.getAllGenres();
+                }
+            }
         } catch (e: Exception) {
             Log.d(TAG, e.message.toString())
         }
