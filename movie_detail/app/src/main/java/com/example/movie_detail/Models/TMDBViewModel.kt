@@ -22,19 +22,7 @@ class TMDBViewModel() : ViewModel() {
     }
 
     fun loadDataOfMovieId(movieId: String): Unit {
-        // TODO - Error handling
-        viewModelScope.launch {
-            if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
-                isLoading.value = true
-                // Load data
-                val movieDetails = theMovieDatabaseRepository.getMovieDetailsById(movieId);
-//                val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
-//                val similarMovies = theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results);
-                // Save data
-//                movieSimpleData.value = SimpleMovieData(movieDetails, similarMovies)
-                isLoading.value = false
-            }
-        }
+      
     }
 
     fun loadResourcesServerConfig() {
@@ -47,16 +35,11 @@ class TMDBViewModel() : ViewModel() {
     }
 
     fun updateWatchedStatus(position: Int) {
-        if (movieSimpleData.value != null) {
-            movieSimpleData.value!!.similarMovies[position].updateAlreadyWatchedValue();
-        }
+
     }
 
     fun updateFavoriteStatus() {
-        if (movieSimpleData.value != null) {
-            movieSimpleData.value!!.movieDetails?.updateFavoriteValue();
-            movieIsFavorite.value = movieSimpleData.value!!.movieDetails?.favorite ?: false;
-        }
+
     }
 
     fun getMovieDetails(): LiveData<SimpleMovieData?> {return movieSimpleData};
