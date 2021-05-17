@@ -68,7 +68,7 @@ class MovieDetails : Fragment() {
     override fun onStart() {
         super.onStart()
         theMovieDatabaseViewModel.loadResourcesServerConfig();
-        theMovieDatabaseViewModel.loadDataOfMovieId("550");
+        theMovieDatabaseViewModel.loadDataOfMovieId("509");
     }
 
     override fun onPause() {
