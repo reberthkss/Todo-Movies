@@ -1,6 +1,7 @@
 package com.example.movie_detail.Models
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.movie_detail.Dataclasses.SimpleMovieData
 import com.example.movie_detail.Dataclasses.TMDBResourceConfig
 import com.example.movie_detail.Repositories.TMDBRepository
+import com.example.movie_detail.Utils.Feedback
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class TMDBViewModel() : ViewModel() {
+    private val TAG = " TMDBViewModel";
     private val resourcesServerConfiguration: MutableLiveData<TMDBResourceConfig?> = MutableLiveData(null);
     private val movieSimpleData: MutableLiveData<SimpleMovieData?> = MutableLiveData(null);
     private val movieIsFavorite: MutableLiveData<Boolean> = MutableLiveData(false);
@@ -26,7 +29,7 @@ class TMDBViewModel() : ViewModel() {
         try {
 
         } catch (e: Exception) {
-
+            Log.d(TAG, e.message.toString())
         }
     }
 
@@ -39,7 +42,7 @@ class TMDBViewModel() : ViewModel() {
                 }
             }
         } catch (e: Exception) {
-
+            Log.d(TAG, e.message.toString())
         }
     }
 
@@ -47,7 +50,7 @@ class TMDBViewModel() : ViewModel() {
         try {
 
         } catch (e: Exception) {
-
+            Log.d(TAG, e.message.toString())
         }
     }
 
@@ -55,7 +58,7 @@ class TMDBViewModel() : ViewModel() {
         try {
 
         } catch (e: Exception) {
-
+            Log.d(TAG, e.message.toString())
         }
     }
 
