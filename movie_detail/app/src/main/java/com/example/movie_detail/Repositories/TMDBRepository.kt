@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.movie_detail.Network.Genre.MovieGenreApi
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
+import com.example.movie_detail.Room.Database
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,7 +23,10 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
             .create(TMDBapirefactor::class.java)
     }
     private val database by lazy {
-//        Room.databaseBuilder()
+        Room
+            .databaseBuilder(context, Database::class.java, "reberth_app")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     suspend fun getMovieDetailsById(movieId: String) = withContext(Dispatchers.IO) {
