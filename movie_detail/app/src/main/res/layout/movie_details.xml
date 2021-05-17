@@ -29,9 +29,17 @@
     </data>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         >
+        <LinearLayout
+            android:id="@+id/no_available_data_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+            <include layout="@layout/no_movies_details"/>
+        </LinearLayout>
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer_view_container"
             android:layout_width="match_parent"

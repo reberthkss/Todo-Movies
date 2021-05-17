@@ -7,4 +7,5 @@
     <string name="MOVIE_LIKES">%s likes</string>
     <string name="POPULARITY_VIEWS">%s views</string>
     <string name="LOADING">Loading...</string>
+    <string name="NO_AVAILABLE_DATA">No available data!</string>
 </resources>
