@@ -1,7 +1,6 @@
 package com.example.movie_detail.Repositories
 
-import com.example.movie_detail.Dataclasses.MovieGenreApi
-import com.example.movie_detail.Dataclasses.SimilarMovieDataclasse
+import com.example.movie_detail.Network.Genre.MovieGenreApi
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
 import com.squareup.moshi.Moshi
