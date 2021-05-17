@@ -16,7 +16,6 @@ import java.time.temporal.ChronoField
 class SimilarMoviesAdapter(val similarMovies: List<MovieDetailsDataclasse>, val callbacks: ISimilarMoviesAdapterCallbacks): RecyclerView.Adapter<SimilarMoviesAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: MovieDetailsRecViewItemAdapterBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(movieDetail: MovieDetailsDataclasse, position: Int) {
-            Log.d("Adapter", " Release date => ${movieDetail.releaseDate}");
             val releaseDateFormatter = DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd[ [HH][:mm][:ss][.SSS]]")
                     .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                     .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)

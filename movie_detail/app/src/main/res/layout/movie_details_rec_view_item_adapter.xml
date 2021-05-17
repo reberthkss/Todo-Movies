@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:shimmer="http://schemas.android.com/tools">
     <data>
         <variable
             name="isFavorite"
@@ -26,6 +27,7 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_marginRight="15dp"
+        android:visibility="visible"
         >
         <LinearLayout
             android:layout_width="0dp"

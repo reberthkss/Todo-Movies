@@ -25,20 +25,18 @@ class MovieDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
+        viewBinding.shimmerViewContainer.startShimmerAnimation();
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
         theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
             val similarMovies = it?.similarMovies ?: listOf();
             val votesCount: Long = it?.movieDetails?.voteCount?.toLong() ?: 0L;
             val popularity: Long = it?.movieDetails?.popularity?.toLong() ?: 0L;
-            Log.d("Fragment", "votes count => ${votesCount}");
-            Log.d("Fragment", "popularity => ${popularity}");
             viewBinding.movieTitle = it?.movieDetails?.title;
             viewBinding.votesCount = NumberFormatters.getFormatedNumber(votesCount);
             viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(popularity);
             viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;
             viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
                 override fun onClickMovie(position: Int) {
-                    Log.d("Fragment", " Updating favorite value...");
                     theMovieDatabaseViewModel.updateWatchedStatus(position);
                     viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
                 }
@@ -55,6 +53,10 @@ class MovieDetails : Fragment() {
 
         theMovieDatabaseViewModel.getFavoriteStatus().observe(viewLifecycleOwner, Observer {
             viewBinding.isFavorite = it;
+        })
+
+        theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
+            viewBinding.isLoading = it;
         })
 
         viewBinding.heartIcon.setOnClickListener {
