@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.movie_detail.Models.TMDBViewModel
 import com.example.movie_detail.R
+import com.example.movie_detail.Utils.Feedback
 import com.example.movie_detail.Utils.NumberFormatters
 import com.example.movie_detail.Views.MovieDetails.Lists.ISimilarMoviesAdapterCallbacks
 import com.example.movie_detail.Views.MovieDetails.Lists.SimilarMoviesAdapter
@@ -42,6 +45,21 @@ class MovieDetails : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        try {
+            requestData();
+        } catch (e: Exception) {
+            // Display message and try to show the movie detail data
+            val movieOverview = theMovieDatabaseViewModel.getMovieDetails().value;
+            val availableData = movieOverview?.movieDetails != null;
+            if (availableData) {
+                viewBinding.noAvailableDataContainer.visibility = GONE;
+                viewBinding.movieDetailsRootContainer.visibility = VISIBLE;
+            } else {
+                viewBinding.noAvailableDataContainer.visibility = VISIBLE;
+                viewBinding.movieDetailsRootContainer.visibility = GONE;
+            }
+            Feedback.displaySnackBar(viewBinding.root, e.message.toString());
+        }
     }
 
     override fun onDestroyView() {
