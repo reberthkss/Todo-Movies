@@ -6,4 +6,5 @@
     <string name="THE_MOVIE_DB_DEFAULT_SIZE">w780</string>
     <string name="MOVIE_LIKES">%s likes</string>
     <string name="POPULARITY_VIEWS">%s views</string>
+    <string name="LOADING">Loading...</string>
 </resources>

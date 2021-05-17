@@ -32,6 +32,7 @@ class MovieDetails : Fragment() {
             val popularity: Long = it?.movieDetails?.popularity?.toLong() ?: 0L;
             Log.d("Fragment", "votes count => ${votesCount}");
             Log.d("Fragment", "popularity => ${popularity}");
+            viewBinding.movieTitle = it?.movieDetails?.title;
             viewBinding.votesCount = NumberFormatters.getFormatedNumber(votesCount);
             viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(popularity);
             viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;

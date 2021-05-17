@@ -19,6 +19,9 @@
         <variable
             name="isFavorite"
             type="Boolean" />
+        <variable
+            name="movieTitle"
+            type='String'/>
     </data>
     <LinearLayout
         android:id="@+id/movie_details_root_container"
@@ -71,18 +74,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:baselineAligned="false"
+                    android:layout_marginVertical="10dp"
                     >
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="The very best of johnny deep"
-                            />
-
-
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@{movieTitle, default=`@string/LOADING`}"
+                            android:textColor="@android:color/white"
+                            android:textSize="40sp" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -119,6 +124,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{@string/MOVIE_LIKES(votesCount)}"
+                            android:textColor="@android:color/white"
                             />
                     </LinearLayout>
                     <LinearLayout
@@ -135,13 +141,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{@string/POPULARITY_VIEWS(moviePopularity)}"
+                            android:textColor="@android:color/white"
                             />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                >
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/similar_movies_list"
                     android:layout_width="match_parent"
