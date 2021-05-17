@@ -9,6 +9,7 @@ import com.example.movie_detail.Dataclasses.SimpleMovieData
 import com.example.movie_detail.Dataclasses.TMDBResourceConfig
 import com.example.movie_detail.Repositories.TMDBRepository
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class TMDBViewModel() : ViewModel() {
     private val resourcesServerConfiguration: MutableLiveData<TMDBResourceConfig?> = MutableLiveData(null);
@@ -22,10 +23,19 @@ class TMDBViewModel() : ViewModel() {
     }
 
     fun loadDataOfMovieId(movieId: String): Unit {
-      
+        try {
+
+        } catch (e: Exception) {
+
+        }
     }
 
     fun loadResourcesServerConfig() {
+        try {
+
+        } catch (e: Exception) {
+
+        }
         viewModelScope.launch {
             if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
                 val resourceServerConfig = theMovieDatabaseRepository.getResourcesConfiguration();
@@ -35,11 +45,19 @@ class TMDBViewModel() : ViewModel() {
     }
 
     fun updateWatchedStatus(position: Int) {
+        try {
 
+        } catch (e: Exception) {
+
+        }
     }
 
     fun updateFavoriteStatus() {
+        try {
 
+        } catch (e: Exception) {
+
+        }
     }
 
     fun getMovieDetails(): LiveData<SimpleMovieData?> {return movieSimpleData};
