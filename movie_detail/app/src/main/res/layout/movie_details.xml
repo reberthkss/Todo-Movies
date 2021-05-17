@@ -31,15 +31,26 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
-            <ImageView
-                android:id="@+id/image_view"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                app:imageUrl="@{movieImageEndpoint}"
-                app:baseUrl="@{resourcesBaseUrl != null ? resourcesBaseUrl : @string/THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL}"
-                app:imageSize="@{@string/THE_MOVIE_DB_DEFAULT_SIZE}"
-                />
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{movieImageEndpoint}"
+                    app:baseUrl="@{resourcesBaseUrl != null ? resourcesBaseUrl : @string/THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL}"
+                    app:imageSize="@{@string/THE_MOVIE_DB_DEFAULT_SIZE}"
+                    />
+                <View
+                    android:layout_height="150dp"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/gradient_shape"
+                    android:layout_gravity="bottom"
+                    />
+            </FrameLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/movie_details_container"

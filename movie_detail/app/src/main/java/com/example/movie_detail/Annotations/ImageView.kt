@@ -17,9 +17,6 @@ fun setImageUrl(imageView: ImageView, imageUrl: String?, imageSize: String?, res
         Glide
             .with(imageView.context)
             .load(URI)
-            .apply(
-                RequestOptions()
-            )
             .into(imageView)
     }
 }
