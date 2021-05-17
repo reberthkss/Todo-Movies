@@ -6,6 +6,8 @@ import com.example.movie_detail.Network.Genre.MovieGenreApi
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
 import com.example.movie_detail.Room.Database
+import com.example.movie_detail.Room.Entities.Genre.GenreEntity
+import com.example.movie_detail.Room.Entities.Movie.MovieEntity
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,23 +33,26 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
 
     suspend fun getMovieDetailsById(movieId: String) = withContext(Dispatchers.IO) {
         val movieDetail = api.loadMovieById(movieId, apiKey).await();
-        movieDetail;
+        movieDetail?.apply {
+            val movieEntity = MovieEntity.fromApi(this)
+            database.movie().insertOneMovie(movieEntity);
+        }
     }
 
-    suspend fun getSimilarlyMoviesOfId(movieId: String): List<MovieApi> = withContext(Dispatchers.IO) {
-        val similarMovies = mutableListOf<MovieApi>();
+    suspend fun getSimilarlyMoviesOfId(movieId: String) = withContext(Dispatchers.IO) {
         val similarMovieIds = api.loadSimilarMovies(movieId, apiKey).await()?.results;
+        val similarMoviesEntity = mutableListOf<MovieEntity>();
         similarMovieIds?.forEach { similarMovie ->
             val movie = api.loadMovieById(similarMovie.id, apiKey).await();
-            if (movie != null) similarMovies.add(movie);
+            if (movie != null) similarMoviesEntity.add(MovieEntity.fromApi(movie));
         }
-        similarMovies;
+        database.movie().insertManyMovies(similarMoviesEntity);
     }
 
-    suspend fun getAllGenres(): List<MovieGenreApi>? = withContext(Dispatchers.IO) {
+    suspend fun getAllGenres() = withContext(Dispatchers.IO) {
         val genres = api.getGenresList(apiKey).await()?.genres;
-        /*TODO - Save in db*/
-        genres;
+        val genresEntity = genres?.map {GenreEntity.fromApi(it)} ?: listOf();
+        database.genre().insertManyGenres(genresEntity);
     }
 
     suspend fun getResourcesConfiguration() = withContext(Dispatchers.IO) {
