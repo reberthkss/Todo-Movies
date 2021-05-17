@@ -68,7 +68,7 @@ class TMDBViewModel() : ViewModel() {
         try {
             isLoading.value = true;
             loadResourcesServerConfig();
-            loadDataOfMovieId("509");
+            loadDataOfMovieId(movieId);
             loadGenres();
             isLoading.value = false;
         } catch (e: Exception) {
