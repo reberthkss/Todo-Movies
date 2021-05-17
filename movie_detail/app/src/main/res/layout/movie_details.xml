@@ -27,16 +27,15 @@
             name="isLoading"
             type="Boolean" />
     </data>
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         >
         <LinearLayout
             android:id="@+id/no_available_data_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:visibility="gone"
             >
             <include layout="@layout/no_movies_details"/>
         </LinearLayout>
@@ -45,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="gone"
             shimmer:duration="800"
             app:visibility="@{isLoading ? `visible` : `gone`}"
             >
@@ -55,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="gone"
             app:visibility="@{!isLoading ? `visible` : `gone`}"
             >
             <LinearLayout
@@ -192,5 +193,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
