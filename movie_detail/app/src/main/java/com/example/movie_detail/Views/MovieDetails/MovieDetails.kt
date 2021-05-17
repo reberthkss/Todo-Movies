@@ -63,11 +63,11 @@ class MovieDetails : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        super.onDestroyView();
     }
 
     fun configure() {
-        theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
+        theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY), requireContext());
     }
 
     fun bindObservers() {

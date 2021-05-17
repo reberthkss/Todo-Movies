@@ -1,5 +1,6 @@
 package com.example.movie_detail.Models
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,8 +17,8 @@ class TMDBViewModel() : ViewModel() {
     private lateinit var theMovieDatabaseRepository: TMDBRepository
     private var isLoading: MutableLiveData<Boolean> = MutableLiveData(false);
 
-    fun configure(baseUrl: String, apiKey: String) {
-        theMovieDatabaseRepository = TMDBRepository(baseUrl, apiKey);
+    fun configure(baseUrl: String, apiKey: String, ctx: Context) {
+        theMovieDatabaseRepository = TMDBRepository(baseUrl, apiKey, ctx);
     }
 
     fun loadDataOfMovieId(movieId: String): Unit {
@@ -27,10 +28,10 @@ class TMDBViewModel() : ViewModel() {
                 isLoading.value = true
                 // Load data
                 val movieDetails = theMovieDatabaseRepository.getMovieDetailsById(movieId);
-                val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
-                val similarMovies = theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results);
+//                val movieIds = theMovieDatabaseRepository.getIdOfSimilarMovies(movieId);
+//                val similarMovies = theMovieDatabaseRepository.getMovieDetailsFromList(movieIds.results);
                 // Save data
-                movieSimpleData.value = SimpleMovieData(movieDetails, similarMovies)
+//                movieSimpleData.value = SimpleMovieData(movieDetails, similarMovies)
                 isLoading.value = false
             }
         }

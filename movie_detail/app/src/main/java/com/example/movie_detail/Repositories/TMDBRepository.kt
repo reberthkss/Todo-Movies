@@ -1,5 +1,7 @@
 package com.example.movie_detail.Repositories
 
+import android.content.Context
+import androidx.room.Room
 import com.example.movie_detail.Network.Genre.MovieGenreApi
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
@@ -9,7 +11,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.*
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class TMDBRepository(baseUrl: String, private val apiKey: String) {
+class TMDBRepository(baseUrl: String, private val apiKey: String, val context: Context) {
     private val moshi = Moshi.Builder().build();
     private val api by lazy {
         Retrofit
@@ -18,6 +20,9 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
             .baseUrl(baseUrl)
             .build()
             .create(TMDBapirefactor::class.java)
+    }
+    private val database by lazy {
+//        Room.databaseBuilder()
     }
 
     suspend fun getMovieDetailsById(movieId: String) = withContext(Dispatchers.IO) {
