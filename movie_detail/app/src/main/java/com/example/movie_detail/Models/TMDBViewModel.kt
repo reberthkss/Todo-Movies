@@ -32,15 +32,14 @@ class TMDBViewModel() : ViewModel() {
 
     fun loadResourcesServerConfig() {
         try {
-
+            viewModelScope.launch {
+                if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
+                    val resourceServerConfig = theMovieDatabaseRepository.getResourcesConfiguration();
+                    resourcesServerConfiguration.value = resourceServerConfig;
+                }
+            }
         } catch (e: Exception) {
 
-        }
-        viewModelScope.launch {
-            if (this@TMDBViewModel::theMovieDatabaseRepository.isInitialized) {
-                val resourceServerConfig = theMovieDatabaseRepository.getResourcesConfiguration();
-                resourcesServerConfiguration.value = resourceServerConfig;
-            }
         }
     }
 
