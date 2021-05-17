@@ -1,8 +1,9 @@
 package com.example.movie_detail.Repositories
 
-import com.example.movie_detail.Dataclasses.MovieDetailsDataclasse
+import com.example.movie_detail.Dataclasses.MovieGenreApi
 import com.example.movie_detail.Dataclasses.SimilarMovieDataclasse
-import com.example.movie_detail.Network.TMDBapi
+import com.example.movie_detail.Network.Movie.MovieApi
+import com.example.movie_detail.Network.TMDBapirefactor
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,26 +18,28 @@ class TMDBRepository(baseUrl: String, private val apiKey: String) {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(baseUrl)
             .build()
-            .create(TMDBapi::class.java)
+            .create(TMDBapirefactor::class.java)
     }
 
-    suspend fun getMovieDetail(movieId: String) = withContext(Dispatchers.IO) {
-        val movieDetail = api.loadMovieId(movieId, apiKey).await();
+    suspend fun getMovieDetailsById(movieId: String) = withContext(Dispatchers.IO) {
+        val movieDetail = api.loadMovieById(movieId, apiKey).await();
         movieDetail;
     }
 
-    suspend fun getIdOfSimilarMovies(movieId: String) = withContext(Dispatchers.IO) {
-        val listOfIds = api.loadSimilarMovies(movieId, apiKey).await()
-        listOfIds
+    suspend fun getSimilarlyMoviesOfId(movieId: String): List<MovieApi> = withContext(Dispatchers.IO) {
+        val similarMovies = mutableListOf<MovieApi>();
+        val similarMovieIds = api.loadSimilarMovies(movieId, apiKey).await()?.results;
+        similarMovieIds?.forEach { similarMovie ->
+            val movie = api.loadMovieById(similarMovie.id, apiKey).await();
+            if (movie != null) similarMovies.add(movie);
+        }
+        similarMovies;
     }
 
-    suspend fun getMovieDetailsFromList(listOfMoviesId: List<SimilarMovieDataclasse>) = withContext(Dispatchers.IO) {
-        val detailOfMovies: MutableList<MovieDetailsDataclasse> = mutableListOf();
-        listOfMoviesId.forEach {movieId: SimilarMovieDataclasse ->
-            val movieDetails = getMovieDetail(movieId.id)
-            detailOfMovies.add(movieDetails)
-        }
-        detailOfMovies;
+    suspend fun getAllGenres(): List<MovieGenreApi>? = withContext(Dispatchers.IO) {
+        val genres = api.getGenresList(apiKey).await()?.genres;
+        /*TODO - Save in db*/
+        genres;
     }
 
     suspend fun getResourcesConfiguration() = withContext(Dispatchers.IO) {
