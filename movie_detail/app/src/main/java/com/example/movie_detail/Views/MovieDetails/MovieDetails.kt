@@ -25,8 +25,34 @@ class MovieDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
-        viewBinding.shimmerViewContainer.startShimmerAnimation();
+        configure();
+        bindObservers();
+        bindViews();
+        return viewBinding.root;
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    fun configure() {
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
+    }
+
+    fun bindObservers() {
         theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
             val similarMovies = it?.similarMovies ?: listOf();
             val votesCount: Long = it?.movieDetails?.voteCount?.toLong() ?: 0L;
@@ -43,10 +69,6 @@ class MovieDetails : Fragment() {
             });
         });
 
-        theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
-            // TODO - Implement
-        });
-
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
             theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL);
         });
@@ -56,30 +78,23 @@ class MovieDetails : Fragment() {
         })
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewBinding.shimmerViewContainer.startShimmerAnimation();
+            } else {
+                viewBinding.shimmerViewContainer.stopShimmerAnimation();
+            }
             viewBinding.isLoading = it;
         })
+    }
 
+    fun bindViews() {
         viewBinding.heartIcon.setOnClickListener {
             theMovieDatabaseViewModel.updateFavoriteStatus();
         }
-        return viewBinding.root;
     }
 
-    override fun onStart() {
-        super.onStart()
+    fun requestData() {
         theMovieDatabaseViewModel.loadResourcesServerConfig();
         theMovieDatabaseViewModel.loadDataOfMovieId("509");
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }
