@@ -13,6 +13,6 @@ data class MovieWithGenresAndSimilarMovies (
     @Embedded val movie: MovieEntity,
     @Relation(parentColumn = "movie_id", entityColumn = "genre_id", associateBy = Junction(MovieAndGenreCf::class))
     val genres: List<GenreEntity>,
-    @Relation(parentColumn = "movie_id", entityColumn = "similar_movie_id", associateBy = Junction(MovieAndSimilarMovieCf::class))
-    val similarMovies: List<SimilarMovieEntity>
+    @Relation(entity = SimilarMovieEntity::class, parentColumn = "movie_id", entityColumn = "similar_movie_id", associateBy = Junction(MovieAndSimilarMovieCf::class))
+    val similarMovies: List<SimilarMovieWithGenre>
     )
