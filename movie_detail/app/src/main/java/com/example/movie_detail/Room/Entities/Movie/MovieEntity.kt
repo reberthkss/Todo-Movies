@@ -16,3 +16,15 @@ data class MovieEntity(
         }
     }
 }
+
+@Entity(tableName = "similar_movie")
+data class SimilarMovieEntity(
+    @PrimaryKey @ColumnInfo(name = "similar_movie_id") val movieId: Long,
+    @ColumnInfo(name = "movie_title") val movieTitle: String
+) {
+    companion object {
+        fun fromApi(movieApi: MovieApi): SimilarMovieEntity {
+            return SimilarMovieEntity(movieApi.movieId, movieApi.movieTitle);
+        }
+    }
+}

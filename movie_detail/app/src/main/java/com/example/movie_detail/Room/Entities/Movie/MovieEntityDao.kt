@@ -11,3 +11,11 @@ interface MovieEntityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertManyMovies(movies: List<MovieEntity>);
 }
+
+@Dao
+interface SimilarEntityDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOneMovie(movieEntity: SimilarMovieEntity);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertManyMovies(movies: List<SimilarMovieEntity>);
+}
