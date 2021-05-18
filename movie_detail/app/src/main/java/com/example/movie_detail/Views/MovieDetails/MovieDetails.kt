@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -56,6 +58,11 @@ class MovieDetails : Fragment() {
                 viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it.movie.popularity.toLong())
                 viewBinding.movieImageEndpoint = it.movie.movieImageUrl
                 viewBinding.isFavorite = it.movie.isFavorite
+                viewBinding.noAvailableDataContainer.visibility = GONE
+                viewBinding.movieDetailsRootContainer.visibility = VISIBLE
+            } else {
+                viewBinding.noAvailableDataContainer.visibility = VISIBLE
+                viewBinding.movieDetailsRootContainer.visibility = GONE
             }
         })
     }
