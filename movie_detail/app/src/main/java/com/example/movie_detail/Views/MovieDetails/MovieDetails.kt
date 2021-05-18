@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.movie_detail.Models.TMDBViewModel
 import com.example.movie_detail.R
+import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
 import com.example.movie_detail.Utils.Feedback
 import com.example.movie_detail.Utils.NumberFormatters
 import com.example.movie_detail.Views.MovieDetails.Lists.ISimilarMoviesAdapterCallbacks
@@ -77,12 +78,12 @@ class MovieDetails : Fragment() {
             viewBinding.votesCount = NumberFormatters.getFormatedNumber(it?.movie?.voteCount ?: 0L);
             viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it?.movie?.popularity?.toLong() ?: 0L);
             viewBinding.movieImageEndpoint = it?.movie?.movieImageUrl;
-            /*viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
+            viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(it?.similarMovies ?: listOf<SimilarMovieEntity>(), object: ISimilarMoviesAdapterCallbacks {
                 override fun onClickMovie(position: Int) {
                     theMovieDatabaseViewModel.updateWatchedStatus(position);
                     viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
                 }
-            });*/
+            });
             if (it != null) {
                 Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
             }
