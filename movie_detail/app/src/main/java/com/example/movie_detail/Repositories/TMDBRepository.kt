@@ -8,6 +8,7 @@ import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
 import com.example.movie_detail.R
 import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
+import com.example.movie_detail.Room.CrossReference.MovieAndSimilarMovieCf
 import com.example.movie_detail.Room.Database
 import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
@@ -56,6 +57,9 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
             val movie = api.loadMovieById(similarMovie.id, apiKey).await();
             if (movie != null) similarMoviesEntity.add(SimilarMovieEntity.fromApi(movie));
         }
+        similarMoviesEntity
+            .map { MovieAndSimilarMovieCf(movieId, it.movieId.toString()) }
+            .apply { database.movieAndSimilarMovie().insertManySimilarMovies(this) }
         database.similarMovie().insertManySimilarMovies(similarMoviesEntity);
     }
 
