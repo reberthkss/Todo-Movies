@@ -1,14 +1,8 @@
 package com.example.movie_detail.Views.MovieDetails.Lists
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movie_detail.Dataclasses.MovieDetailsDataclasse
-import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
-import com.example.movie_detail.Room.Relations.MovieWithSimilarMovies
 import com.example.movie_detail.Room.Relations.SimilarMovieWithGenre
 import com.example.movie_detail.databinding.MovieDetailsRecViewItemAdapterBinding
 import java.time.LocalDate

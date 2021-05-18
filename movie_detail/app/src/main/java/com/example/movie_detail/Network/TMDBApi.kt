@@ -1,7 +1,6 @@
 package com.example.movie_detail.Network
 
 import com.example.movie_detail.Dataclasses.GetSimilarMoviesResponse
-import com.example.movie_detail.Dataclasses.MovieDetailsDataclasse
 import com.example.movie_detail.Dataclasses.TMDBResourceConfig
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.Responses.GetGenres
@@ -11,7 +10,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-interface TMDBapirefactor {
+interface TMDBApi {
     @GET("movie/{movieId}")
     fun loadMovieById(@Path("movieId") movieId: String, @Query("api_key") apiKey: String): Call<MovieApi?>
     @GET("movie/{movieId}/similar")

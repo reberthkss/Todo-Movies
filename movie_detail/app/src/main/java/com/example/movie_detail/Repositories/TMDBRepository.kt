@@ -3,7 +3,7 @@ package com.example.movie_detail.Repositories
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.example.movie_detail.Network.TMDBapirefactor
+import com.example.movie_detail.Network.TMDBApi
 import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
 import com.example.movie_detail.Room.CrossReference.MovieAndSimilarMovieCf
 import com.example.movie_detail.Room.CrossReference.SimilarMovieWithGenreCf
@@ -29,7 +29,7 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(baseUrl)
             .build()
-            .create(TMDBapirefactor::class.java)
+            .create(TMDBApi::class.java)
     }
     private val database by lazy {
         Room
