@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 @Dao
 interface SimilarMovieWithGenreCfDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOneMovieWithGenreCf(movieAndSimilarMovieCf: MovieAndSimilarMovieCf);
+    fun insertOneMovieWithGenreCf(movieAndSimilarMovieCf: SimilarMovieWithGenreCf);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertManyMoviesWithGenresCf(moviesAndSimilarlyMoviesCf: List<MovieAndSimilarMovieCf>);
+    fun insertManyMoviesWithGenresCf(moviesAndSimilarlyMoviesCf: List<SimilarMovieWithGenreCf>);
 }

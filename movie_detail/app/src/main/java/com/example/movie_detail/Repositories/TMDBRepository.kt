@@ -12,6 +12,7 @@ import com.example.movie_detail.Network.TMDBapirefactor
 import com.example.movie_detail.R
 import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
 import com.example.movie_detail.Room.CrossReference.MovieAndSimilarMovieCf
+import com.example.movie_detail.Room.CrossReference.SimilarMovieWithGenreCf
 import com.example.movie_detail.Room.Database
 import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
@@ -58,14 +59,32 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
     suspend fun getSimilarlyMoviesOfId() = withContext(Dispatchers.IO) {
         val similarMovieIds = api.loadSimilarMovies(movieId, apiKey).await()?.results;
         val similarMoviesEntity = mutableListOf<SimilarMovieEntity>();
+
         similarMovieIds?.forEach { similarMovie ->
+            val similarMovieWithGenre = mutableListOf<SimilarMovieWithGenreCf>();
             val movie = api.loadMovieById(similarMovie.id, apiKey).await();
             if (movie != null) similarMoviesEntity.add(SimilarMovieEntity.fromApi(movie));
+            movie
+                ?.genres
+                ?.map {
+                    SimilarMovieWithGenreCf(movie.movieId, it.genreId)
+                }
+                .apply {
+                    if (this != null) {
+                        database.similarMovieAndGenre().insertManyMoviesWithGenresCf(this);
+                    }
+                }
         }
         similarMoviesEntity
             .map { MovieAndSimilarMovieCf(movieId, it.movieId.toString()) }
             .apply { database.movieAndSimilarMovie().insertManySimilarMovies(this) }
+
         database.similarMovie().insertManySimilarMovies(similarMoviesEntity);
+    }
+
+    suspend fun getSimilarMovieWithGenre() = withContext(Dispatchers.IO) {
+        val similarMovieWithGenre = database.relations().getSimilarMovieWithGenreById("627");
+        Log.d(TAG, "similar movie => ${similarMovieWithGenre}");
     }
 
     suspend fun getAllGenres() = withContext(Dispatchers.IO) {
