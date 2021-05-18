@@ -12,6 +12,7 @@ import com.example.movie_detail.Room.Entities.Movie.MovieEntityDao
 abstract class Database: RoomDatabase() {
     abstract fun movie(): MovieEntityDao
     abstract fun genre(): GenreEntityDao
+    abstract val crossReferences: CrossReferences
     abstract class CrossReferences {
         abstract fun movieAndGenre(): MovieAndGenreCfDao
     }
