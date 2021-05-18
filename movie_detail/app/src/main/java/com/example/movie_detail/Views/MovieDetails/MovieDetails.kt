@@ -64,7 +64,6 @@ class MovieDetails : Fragment() {
     fun observeMovieDetails() {
         theMovieDatabaseViewModel.getMovieDetail().removeObservers(viewLifecycleOwner);
         theMovieDatabaseViewModel.getMovieDetail().observe(viewLifecycleOwner, Observer {
-            Log.d("Fragment", "movie => ${it}")
             if (it != null) {
                 viewBinding.movieTitle = it.movie.movieTitle
                 viewBinding.votesCount = NumberFormatters.getFormatedNumber(it.movie.voteCount);
@@ -78,7 +77,6 @@ class MovieDetails : Fragment() {
     fun observeSimilarMovies() {
         theMovieDatabaseViewModel.getSimilarMovies().removeObservers(viewLifecycleOwner);
         theMovieDatabaseViewModel.getSimilarMovies().observe(viewLifecycleOwner, Observer {
-            Log.d("fragment", "list => ${it}")
             if (it != null && it.similarMovies.isNotEmpty()) {
                 viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(it.similarMovies, object: ISimilarMoviesAdapterCallbacks {
                     override fun onClickMovie(position: Int) {
@@ -100,7 +98,7 @@ class MovieDetails : Fragment() {
         })
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
-            if (it) {
+            if (it == true) {
                 viewBinding.shimmerViewContainer.startShimmerAnimation();
             } else {
                 viewBinding.shimmerViewContainer.stopShimmerAnimation();

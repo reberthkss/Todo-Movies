@@ -51,11 +51,11 @@ class TMDBViewModel() : ViewModel() {
 
     fun loadMovieData() {
         try {
+            isLoading.value = true;
             if (this::theMovieDatabaseRepository.isInitialized) {
                 viewModelScope.launch {
                     isLoading.value = true;
                     if (Network.hasInternetConnection()) {
-                        Log.d("model", "has connection!!!")
                         loadResourcesServerConfig();
                         loadDataOfMovieId();
                         loadGenres();
@@ -67,6 +67,7 @@ class TMDBViewModel() : ViewModel() {
             }
         } catch (e: Exception) {
             Log.d(TAG, e.message.toString());
+            isLoading.value = false;
         }
     }
 
