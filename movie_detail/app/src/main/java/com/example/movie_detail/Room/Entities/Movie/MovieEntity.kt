@@ -12,7 +12,7 @@ data class MovieEntity(
     @ColumnInfo(name = "image_url") val movieImageUrl: String,
     @ColumnInfo(name = "release_date") val releaseDate: String,
     @ColumnInfo(name = "vote_count") val voteCount: Long,
-    @ColumnInfo(name = "popularity") val popularity: Long
+    @ColumnInfo(name = "popularity") val popularity: Float
 ) {
     companion object {
         fun fromApi(movieApi: MovieApi): MovieEntity {
@@ -35,7 +35,7 @@ data class SimilarMovieEntity(
     @ColumnInfo(name = "image_url") val movieImageUrl: String,
     @ColumnInfo(name = "release_date") val releaseDate: String,
     @ColumnInfo(name = "vote_count") val voteCount: Long,
-    @ColumnInfo(name = "popularity") val popularity: Long
+    @ColumnInfo(name = "popularity") val popularity: Float
 ) {
     companion object {
         fun fromApi(movieApi: MovieApi): SimilarMovieEntity {

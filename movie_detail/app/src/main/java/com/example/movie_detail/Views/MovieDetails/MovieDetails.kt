@@ -75,7 +75,7 @@ class MovieDetails : Fragment() {
             Log.d("Fragment", " Movie entity from db => ${it}")
             viewBinding.movieTitle = it?.movie?.movieTitle
             viewBinding.votesCount = NumberFormatters.getFormatedNumber(it?.movie?.voteCount ?: 0L);
-            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it?.movie?.popularity ?: 0L);
+            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it?.movie?.popularity?.toLong() ?: 0L);
             viewBinding.movieImageEndpoint = it?.movie?.movieImageUrl;
             /*viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
                 override fun onClickMovie(position: Int) {

@@ -11,5 +11,5 @@ data class MovieApi(
     @field:Json(name = "poster_path") val imageUrl: String,
     @field:Json(name = "release_date") val releaseDate: String,
     @field:Json(name = "vote_count") val voteCount: Long,
-    @field:Json(name = "popularity") val popularity: Long
+    @field:Json(name = "popularity") val popularity: Float
     )

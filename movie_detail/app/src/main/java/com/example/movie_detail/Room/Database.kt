@@ -19,7 +19,7 @@ import com.example.movie_detail.Room.Relations.RelationsDao
     MovieEntity::class, GenreEntity::class, SimilarMovieEntity::class,
     // Cross references tables
     MovieAndGenreCf::class, MovieAndSimilarMovieCf::class
-), version = 13)
+), version = 14)
 abstract class Database: RoomDatabase() {
     abstract fun movie(): MovieEntityDao
     abstract fun genre(): GenreEntityDao
