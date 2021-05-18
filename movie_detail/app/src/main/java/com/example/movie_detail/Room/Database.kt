@@ -1,5 +1,6 @@
 package com.example.movie_detail.Room
 
+import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.movie_detail.Room.CrossReference.MovieAndGenreCfDao
@@ -12,8 +13,6 @@ import com.example.movie_detail.Room.Entities.Movie.MovieEntityDao
 abstract class Database: RoomDatabase() {
     abstract fun movie(): MovieEntityDao
     abstract fun genre(): GenreEntityDao
-    abstract val crossReferences: CrossReferences
-    abstract class CrossReferences {
-        abstract fun movieAndGenre(): MovieAndGenreCfDao
-    }
+    abstract fun movieAndGenre(): MovieAndGenreCfDao
+
 }

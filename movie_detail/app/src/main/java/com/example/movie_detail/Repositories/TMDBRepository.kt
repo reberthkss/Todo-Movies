@@ -7,6 +7,7 @@ import com.example.movie_detail.Network.Genre.MovieGenreApi
 import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
 import com.example.movie_detail.R
+import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
 import com.example.movie_detail.Room.Database
 import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
@@ -38,9 +39,11 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
         val movieDetail = api.loadMovieById(movieId, apiKey).await();
         movieDetail?.apply {
             val movieEntity = MovieEntity.fromApi(this);
-
-            // TODO - Make the cross reference
-
+            this.genres
+                .map { MovieAndGenreCf(movieId.toLong(), it.genreId) }
+                .apply {
+                    database.movieAndGenre().insertManyMovieAndGenreCf(this);
+                }
             database.movie().insertOneMovie(movieEntity);
         }
     }
