@@ -1,8 +1,6 @@
 package com.example.movie_detail.Room.Entities.Movie
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 
 @Dao
 interface MovieEntityDao {
@@ -10,6 +8,8 @@ interface MovieEntityDao {
     fun insertOneMovie(movieEntity: MovieEntity);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertManyMovies(movies: List<MovieEntity>);
+    @Update(entity = MovieEntity::class)
+    fun updateMovieEntity(movieEntity: MovieEntity);
 }
 
 @Dao
@@ -18,4 +18,6 @@ interface SimilarEntityDao {
     fun insertOneSimilarMovie(movieEntity: SimilarMovieEntity);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertManySimilarMovies(movies: List<SimilarMovieEntity>);
+    @Update(entity = SimilarMovieEntity::class)
+    fun updateSimilarMovieEntity(similarMovie: SimilarMovieEntity);
 }

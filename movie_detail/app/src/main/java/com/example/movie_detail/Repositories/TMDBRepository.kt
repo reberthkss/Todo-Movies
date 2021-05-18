@@ -1,15 +1,9 @@
 package com.example.movie_detail.Repositories
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.room.Room
-import com.example.movie_detail.Network.Genre.MovieGenreApi
-import com.example.movie_detail.Network.Movie.MovieApi
 import com.example.movie_detail.Network.TMDBapirefactor
-import com.example.movie_detail.R
 import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
 import com.example.movie_detail.Room.CrossReference.MovieAndSimilarMovieCf
 import com.example.movie_detail.Room.CrossReference.SimilarMovieWithGenreCf
@@ -17,7 +11,9 @@ import com.example.movie_detail.Room.Database
 import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
 import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
+import com.example.movie_detail.Room.Relations.MovieWithGenres
 import com.example.movie_detail.Room.Relations.MovieWithGenresAndSimilarMovies
+import com.example.movie_detail.Room.Relations.MovieWithSimilarMovies
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -41,7 +37,6 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
             .fallbackToDestructiveMigration()
             .build()
     }
-    val movieDetails: LiveData<MovieWithGenresAndSimilarMovies> = database.relations().getMovieDetailsById(movieId);
 
     suspend fun getMovieDetailsById() = withContext(Dispatchers.IO) {
         val movieDetail = api.loadMovieById(movieId, apiKey).await();
@@ -82,10 +77,24 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
         database.similarMovie().insertManySimilarMovies(similarMoviesEntity);
     }
 
-    suspend fun getSimilarMovieWithGenre() = withContext(Dispatchers.IO) {
-        val similarMovieWithGenre = database.relations().getSimilarMovieWithGenreById("627");
-        Log.d(TAG, "similar movie => ${similarMovieWithGenre}");
+    suspend fun getMovieWithGenre() = withContext(Dispatchers.IO) {
+        val movieWithGenre: MovieWithGenres = database.relations().getMovieWithGenreById(movieId);
+        movieWithGenre
     }
+
+    suspend fun getSimilarMovieWithGenre() = withContext(Dispatchers.IO) {
+        val similarMovieWithGenre: MovieWithSimilarMovies = database.relations().getMovieWithSimilarMoviesById(movieId)
+        similarMovieWithGenre
+    }
+
+    suspend fun updateMovieEntity(movie: MovieEntity) = withContext(Dispatchers.IO) {
+        database.movie().updateMovieEntity(movie);
+    }
+
+    suspend fun updateSimilarMovieEntity(similarMovie: SimilarMovieEntity) = withContext(Dispatchers.IO) {
+        database.similarMovie().updateSimilarMovieEntity(similarMovie);
+    }
+
 
     suspend fun getAllGenres() = withContext(Dispatchers.IO) {
         val genres = api.getGenresList(apiKey).await()?.genres;

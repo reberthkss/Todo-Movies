@@ -29,13 +29,8 @@ class SimilarMoviesAdapter(val similarMovies: List<SimilarMovieWithGenre>, val c
             binding.movieTitle = movieDetail.similarMovie.movieTitle;
             binding.movieDescription = releaseDate.format(releaseYearFormatter) + " " + movieDetail.genres.map {it.genreName}.reduce {acc, genre -> "${acc}, ${genre}"};
             binding.movieImageUrl = movieDetail.similarMovie.movieImageUrl;
-//            binding.isFavorite = movieDetail.alreadyWatched;
+            binding.isWatched = movieDetail.similarMovie.isWatched;
 
-            if (false) {
-                binding.checkedIcon.visibility = VISIBLE;
-            } else {
-                binding.checkedIcon.visibility = GONE;
-            }
             binding.movieCardContainer.setOnClickListener {
                 callbacks.onClickMovie(position);
             }

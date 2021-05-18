@@ -26,10 +26,13 @@ interface RelationsDao {
     @Query("select * from similar_movie where similar_movie_id like :similarMovieId limit 1")
     fun getSimilarMovieWithGenreById(similarMovieId: String): SimilarMovieWithGenre
     @Transaction
+    @Query("select * from similar_movie where similar_movie_id like :similarMovieId")
+    fun getSimilarMoviesWithGenreById(similarMovieId: String): List<SimilarMovieWithGenre>
+    @Transaction
     @Query("select * from movie where movie_id")
     fun getMoviesDetails(): List<MovieWithGenresAndSimilarMovies>
     @Transaction
     @Query ("select * from movie where movie_id like :movieId limit 1")
-    fun getMovieDetailsById(movieId: String): LiveData<MovieWithGenresAndSimilarMovies>;
+    fun getMovieDetailsById(movieId: String): MovieWithGenresAndSimilarMovies
 
 }

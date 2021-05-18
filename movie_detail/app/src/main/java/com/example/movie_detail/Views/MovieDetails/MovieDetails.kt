@@ -12,8 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.movie_detail.Models.TMDBViewModel
 import com.example.movie_detail.R
-import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
-import com.example.movie_detail.Room.Relations.SimilarMovieWithGenre
 import com.example.movie_detail.Utils.Feedback
 import com.example.movie_detail.Utils.NumberFormatters
 import com.example.movie_detail.Views.MovieDetails.Lists.ISimilarMoviesAdapterCallbacks
@@ -50,17 +48,7 @@ class MovieDetails : Fragment() {
         try {
             requestData();
         } catch (e: Exception) {
-            // Display message and try to show the movie detail data
-//            val movieOverview = theMovieDatabaseViewModel.getMovieDetails();
-//            val availableData = movieOverview?.movieDetails != null;
-//            if (availableData) {
-//                viewBinding.noAvailableDataContainer.visibility = GONE;
-//                viewBinding.movieDetailsRootContainer.visibility = VISIBLE;
-//            } else {
-//                viewBinding.noAvailableDataContainer.visibility = VISIBLE;
-//                viewBinding.movieDetailsRootContainer.visibility = GONE;
-//            }
-            Feedback.displaySnackBar(viewBinding.root, e.message.toString());
+            Log.d("Fragment", "Error on request data => ${e.message}");
         }
     }
 
@@ -72,23 +60,36 @@ class MovieDetails : Fragment() {
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY), requireContext(), "509")
     }
 
-    fun bindObservers() {
-        theMovieDatabaseViewModel.getMovieDetails()?.observe(viewLifecycleOwner, Observer {
-            Log.d("Fragment", " Movie entity from db => ${it}")
-            viewBinding.movieTitle = it?.movie?.movieTitle
-            viewBinding.votesCount = NumberFormatters.getFormatedNumber(it?.movie?.voteCount ?: 0L);
-            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it?.movie?.popularity?.toLong() ?: 0L);
-            viewBinding.movieImageEndpoint = it?.movie?.movieImageUrl;
-            viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(it?.similarMovies ?: listOf<SimilarMovieWithGenre>(), object: ISimilarMoviesAdapterCallbacks {
-                override fun onClickMovie(position: Int) {
-                    theMovieDatabaseViewModel.updateWatchedStatus(position);
-                    viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
-                }
-            });
+
+    fun observeMovieDetails() {
+        theMovieDatabaseViewModel.getMovieDetail().removeObservers(viewLifecycleOwner);
+        theMovieDatabaseViewModel.getMovieDetail().observe(viewLifecycleOwner, Observer {
+            Log.d("Fragment", "movie => ${it}")
             if (it != null) {
-                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
+                viewBinding.movieTitle = it.movie.movieTitle
+                viewBinding.votesCount = NumberFormatters.getFormatedNumber(it.movie.voteCount);
+                viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it.movie.popularity.toLong());
+                viewBinding.movieImageEndpoint = it.movie.movieImageUrl;
+                viewBinding.isFavorite = it.movie.isFavorite;
             }
         });
+    }
+
+    fun observeSimilarMovies() {
+        theMovieDatabaseViewModel.getSimilarMovies().removeObservers(viewLifecycleOwner);
+        theMovieDatabaseViewModel.getSimilarMovies().observe(viewLifecycleOwner, Observer {
+            Log.d("fragment", "list => ${it}")
+            if (it != null && it.similarMovies.isNotEmpty()) {
+                viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(it.similarMovies, object: ISimilarMoviesAdapterCallbacks {
+                    override fun onClickMovie(position: Int) {
+                        theMovieDatabaseViewModel.updateWatchedStatus(position);
+                        viewBinding.similarMoviesList.adapter?.notifyItemChanged(position);
+                    }
+                })
+            }
+        })
+    }
+    fun bindObservers() {
 
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
             theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL);
@@ -103,6 +104,9 @@ class MovieDetails : Fragment() {
                 viewBinding.shimmerViewContainer.startShimmerAnimation();
             } else {
                 viewBinding.shimmerViewContainer.stopShimmerAnimation();
+                observeMovieDetails();
+                observeSimilarMovies();
+                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
             }
             viewBinding.isLoading = it;
         })

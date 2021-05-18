@@ -1,6 +1,8 @@
 package com.example.movie_detail.Annotations
 
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -18,5 +20,13 @@ fun setImageUrl(imageView: ImageView, imageUrl: String?, imageSize: String?, res
             .with(imageView.context)
             .load(URI)
             .into(imageView)
+    }
+}
+@BindingAdapter(value = ["visibility"])
+fun setImageVisibility(imageView: ImageView, visibility: String) {
+    if (visibility == "visible") {
+        imageView.visibility = VISIBLE;
+    } else {
+        imageView.visibility = GONE;
     }
 }
