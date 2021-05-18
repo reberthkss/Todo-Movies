@@ -11,6 +11,7 @@ import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
 import com.example.movie_detail.Room.Database
 import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
+import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -50,12 +51,12 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
 
     suspend fun getSimilarlyMoviesOfId(movieId: String) = withContext(Dispatchers.IO) {
         val similarMovieIds = api.loadSimilarMovies(movieId, apiKey).await()?.results;
-        val similarMoviesEntity = mutableListOf<MovieEntity>();
+        val similarMoviesEntity = mutableListOf<SimilarMovieEntity>();
         similarMovieIds?.forEach { similarMovie ->
             val movie = api.loadMovieById(similarMovie.id, apiKey).await();
-            if (movie != null) similarMoviesEntity.add(MovieEntity.fromApi(movie));
+            if (movie != null) similarMoviesEntity.add(SimilarMovieEntity.fromApi(movie));
         }
-        database.movie().insertManyMovies(similarMoviesEntity);
+        database.similarMovie().insertManySimilarMovies(similarMoviesEntity);
     }
 
     suspend fun getAllGenres() = withContext(Dispatchers.IO) {

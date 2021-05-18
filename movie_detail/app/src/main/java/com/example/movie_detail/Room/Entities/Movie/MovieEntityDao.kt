@@ -15,7 +15,7 @@ interface MovieEntityDao {
 @Dao
 interface SimilarEntityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOneMovie(movieEntity: SimilarMovieEntity);
+    fun insertOneSimilarMovie(movieEntity: SimilarMovieEntity);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertManyMovies(movies: List<SimilarMovieEntity>);
+    fun insertManySimilarMovies(movies: List<SimilarMovieEntity>);
 }
