@@ -18,7 +18,7 @@ import retrofit2.*
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class TMDBRepository(baseUrl: String, private val apiKey: String, val context: Context) {
-    private val TAG = TMDBRepository::class.toString()
+    private val TAG = "TMDBRepository"
     private val moshi = Moshi.Builder().build();
     private val api by lazy {
         Retrofit
