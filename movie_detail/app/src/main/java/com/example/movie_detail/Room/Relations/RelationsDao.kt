@@ -9,4 +9,8 @@ interface RelationsDao {
     fun getMoviesWithGenres(): List<MovieWithGenres>
     @Query("select * from movie where movie_id like :movieId")
     fun getMovieWithGenreById(movieId: String): MovieWithGenres;
+    @Query("select * from movie")
+    fun getMovieWithSimilarMovies(): List<MovieAndSimilarMovies>;
+    @Query("select * from movie where movie_id like :movieId")
+    fun getMovieWithSimilarMoviesById( movieId: String): MovieAndSimilarMovies
 }
