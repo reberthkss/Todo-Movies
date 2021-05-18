@@ -42,7 +42,7 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
         movieDetail?.apply {
             val movieEntity = MovieEntity.fromApi(this);
             this.genres
-                .map { MovieAndGenreCf(movieId.toLong(), it.genreId) }
+                .map { MovieAndGenreCf(movieId, it.genreId.toString()) }
                 .apply {
                     database.movieAndGenre().insertManyMovieAndGenreCf(this);
                 }
@@ -61,6 +61,11 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
             .map { MovieAndSimilarMovieCf(movieId, it.movieId.toString()) }
             .apply { database.movieAndSimilarMovie().insertManySimilarMovies(this) }
         database.similarMovie().insertManySimilarMovies(similarMoviesEntity);
+    }
+
+    suspend fun getMovieDetails(movieId: String) = withContext(Dispatchers.IO) {
+        val movieDetails = database.relations().getMovieDetailsById(movieId);
+        Log.d(TAG, "Movie details => ${movieDetails}");
     }
 
     suspend fun getAllGenres() = withContext(Dispatchers.IO) {

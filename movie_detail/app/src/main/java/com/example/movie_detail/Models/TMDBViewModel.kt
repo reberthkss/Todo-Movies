@@ -64,15 +64,24 @@ class TMDBViewModel() : ViewModel() {
         }
     }
 
-    fun loadMovieDetails(movieId: String) {
+    fun loadMovieData(movieId: String) {
         try {
-            isLoading.value = true;
-            loadResourcesServerConfig();
-            loadDataOfMovieId(movieId);
-            loadGenres();
-            isLoading.value = false;
+            if (this::theMovieDatabaseRepository.isInitialized) {
+                isLoading.value = true;
+                loadResourcesServerConfig();
+                loadDataOfMovieId(movieId);
+                loadGenres();
+                loadMovieDetails(movieId);
+                isLoading.value = false;
+            }
         } catch (e: Exception) {
             Log.d(TAG, e.message.toString());
+        }
+    }
+
+    fun loadMovieDetails(movieId: String) {
+        viewModelScope.launch {
+            theMovieDatabaseRepository.getMovieDetails(movieId);
         }
     }
     fun updateWatchedStatus(position: Int) {

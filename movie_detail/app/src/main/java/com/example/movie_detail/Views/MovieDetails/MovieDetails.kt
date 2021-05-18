@@ -1,7 +1,6 @@
 package com.example.movie_detail.Views.MovieDetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -115,6 +114,6 @@ class MovieDetails : Fragment() {
     }
 
     fun requestData() {
-        theMovieDatabaseViewModel.loadMovieDetails("509");
+        theMovieDatabaseViewModel.loadMovieData("509");
     }
 }

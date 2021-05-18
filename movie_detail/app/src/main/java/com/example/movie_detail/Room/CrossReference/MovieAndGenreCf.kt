@@ -5,6 +5,6 @@ import androidx.room.Entity
 
 @Entity(tableName = "movie_and_genre", primaryKeys = ["movie_id", "genre_id"])
 data class MovieAndGenreCf(
-    @ColumnInfo(name = "movie_id") val movieId: Long,
-    @ColumnInfo(name = "genre_id") val genreId: Long
+    @ColumnInfo(name = "movie_id") val movieId: String,
+    @ColumnInfo(name = "genre_id") val genreId: String
 )

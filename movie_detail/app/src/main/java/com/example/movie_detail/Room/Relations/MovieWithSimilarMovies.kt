@@ -7,7 +7,7 @@ import com.example.movie_detail.Room.CrossReference.MovieAndSimilarMovieCf
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
 import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
 
-data class MovieAndSimilarMovies(
+data class MovieWithSimilarMovies(
     @Embedded val movie: MovieEntity,
     @Relation(parentColumn = "movie_id", entityColumn = "similar_movie_id", associateBy = Junction(MovieAndSimilarMovieCf::class))
     val similarMovies: List<SimilarMovieEntity>
