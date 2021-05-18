@@ -9,7 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.movie_detail.Dataclasses.SimpleMovieData
 import com.example.movie_detail.Dataclasses.TMDBResourceConfig
 import com.example.movie_detail.Repositories.TMDBRepository
+import com.example.movie_detail.Room.Entities.Movie.MovieEntity
+import com.example.movie_detail.Room.Relations.MovieWithGenresAndSimilarMovies
 import com.example.movie_detail.Utils.Feedback
+import com.example.movie_detail.Views.MovieDetails.MovieDetails
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -17,21 +20,21 @@ import java.lang.Exception
 class TMDBViewModel() : ViewModel() {
     private val TAG = " TMDBViewModel";
     private val resourcesServerConfiguration: MutableLiveData<TMDBResourceConfig?> = MutableLiveData(null);
-    private val movieSimpleData: MutableLiveData<SimpleMovieData?> = MutableLiveData(null);
     private val movieIsFavorite: MutableLiveData<Boolean> = MutableLiveData(false);
     private lateinit var theMovieDatabaseRepository: TMDBRepository
     private var isLoading: MutableLiveData<Boolean> = MutableLiveData(false);
-
-    fun configure(baseUrl: String, apiKey: String, ctx: Context) {
-        theMovieDatabaseRepository = TMDBRepository(baseUrl, apiKey, ctx);
+    private var movieDetails: LiveData<MovieWithGenresAndSimilarMovies?>? = null ;
+    fun configure(baseUrl: String, apiKey: String, ctx: Context, movieId: String) {
+        theMovieDatabaseRepository = TMDBRepository(baseUrl, apiKey, ctx, movieId);
+        movieDetails = theMovieDatabaseRepository.movieDetails as LiveData<MovieWithGenresAndSimilarMovies?>?;
     }
 
-    fun loadDataOfMovieId(movieId: String) {
+    fun loadDataOfMovieId() {
         try {
             if (this::theMovieDatabaseRepository.isInitialized) {
                 viewModelScope.launch {
-                    theMovieDatabaseRepository.getMovieDetailsById(movieId);
-                    theMovieDatabaseRepository.getSimilarlyMoviesOfId(movieId);
+                    theMovieDatabaseRepository.getMovieDetailsById();
+                    theMovieDatabaseRepository.getSimilarlyMoviesOfId();
                 }
             }
         } catch (e: Exception) {
@@ -64,14 +67,13 @@ class TMDBViewModel() : ViewModel() {
         }
     }
 
-    fun loadMovieData(movieId: String) {
+    fun loadMovieData() {
         try {
             if (this::theMovieDatabaseRepository.isInitialized) {
                 isLoading.value = true;
                 loadResourcesServerConfig();
-                loadDataOfMovieId(movieId);
+                loadDataOfMovieId();
                 loadGenres();
-                loadMovieDetails(movieId);
                 isLoading.value = false;
             }
         } catch (e: Exception) {
@@ -79,10 +81,8 @@ class TMDBViewModel() : ViewModel() {
         }
     }
 
-    fun loadMovieDetails(movieId: String) {
-        viewModelScope.launch {
-            theMovieDatabaseRepository.getMovieDetails(movieId);
-        }
+    fun getMovieDetails(): LiveData<MovieWithGenresAndSimilarMovies?>? {
+        return movieDetails;
     }
     fun updateWatchedStatus(position: Int) {
         try {
@@ -96,11 +96,10 @@ class TMDBViewModel() : ViewModel() {
         try {
 
         } catch (e: Exception) {
-            Log.d(TAG, e.message.toString())
+            Log.d(TAG, e.message.toString());
         }
     }
 
-    fun getMovieDetails(): LiveData<SimpleMovieData?> {return movieSimpleData};
     fun getLoadingStatus(): LiveData<Boolean> {return isLoading};
     fun getResourceServerConfig(): LiveData<TMDBResourceConfig?> {return resourcesServerConfiguration};
     fun getFavoriteStatus(): LiveData<Boolean> {return movieIsFavorite};

@@ -1,6 +1,7 @@
 package com.example.movie_detail.Views.MovieDetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -48,15 +49,15 @@ class MovieDetails : Fragment() {
             requestData();
         } catch (e: Exception) {
             // Display message and try to show the movie detail data
-            val movieOverview = theMovieDatabaseViewModel.getMovieDetails().value;
-            val availableData = movieOverview?.movieDetails != null;
-            if (availableData) {
-                viewBinding.noAvailableDataContainer.visibility = GONE;
-                viewBinding.movieDetailsRootContainer.visibility = VISIBLE;
-            } else {
-                viewBinding.noAvailableDataContainer.visibility = VISIBLE;
-                viewBinding.movieDetailsRootContainer.visibility = GONE;
-            }
+//            val movieOverview = theMovieDatabaseViewModel.getMovieDetails();
+//            val availableData = movieOverview?.movieDetails != null;
+//            if (availableData) {
+//                viewBinding.noAvailableDataContainer.visibility = GONE;
+//                viewBinding.movieDetailsRootContainer.visibility = VISIBLE;
+//            } else {
+//                viewBinding.noAvailableDataContainer.visibility = VISIBLE;
+//                viewBinding.movieDetailsRootContainer.visibility = GONE;
+//            }
             Feedback.displaySnackBar(viewBinding.root, e.message.toString());
         }
     }
@@ -66,24 +67,21 @@ class MovieDetails : Fragment() {
     }
 
     fun configure() {
-        theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY), requireContext());
+        theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY), requireContext(), "509")
     }
 
     fun bindObservers() {
-        theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
-            val similarMovies = it?.similarMovies ?: listOf();
-            val votesCount: Long = it?.movieDetails?.voteCount?.toLong() ?: 0L;
-            val popularity: Long = it?.movieDetails?.popularity?.toLong() ?: 0L;
-            viewBinding.movieTitle = it?.movieDetails?.title;
-            viewBinding.votesCount = NumberFormatters.getFormatedNumber(votesCount);
-            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(popularity);
-            viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;
-            viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
+        theMovieDatabaseViewModel.getMovieDetails()?.observe(viewLifecycleOwner, Observer {
+//            viewBinding.movieTitle = it?.movie.movieTitle
+//            viewBinding.votesCount = NumberFormatters.getFormatedNumber(votesCount);
+//            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(popularity);
+//            viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;
+            /*viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
                 override fun onClickMovie(position: Int) {
                     theMovieDatabaseViewModel.updateWatchedStatus(position);
                     viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
                 }
-            });
+            });*/
             if (it != null) {
                 Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
             }
@@ -114,6 +112,6 @@ class MovieDetails : Fragment() {
     }
 
     fun requestData() {
-        theMovieDatabaseViewModel.loadMovieData("509");
+        theMovieDatabaseViewModel.loadMovieData();
     }
 }
