@@ -66,6 +66,8 @@ class TMDBRepository(baseUrl: String, private val apiKey: String, val context: C
     suspend fun getMovieDetails(movieId: String) = withContext(Dispatchers.IO) {
         val movieDetails = database.relations().getMovieDetailsById(movieId);
         Log.d(TAG, "Movie details => ${movieDetails}");
+        val movieWithGenre = database.relations().getMovieWithGenreById(movieId);
+        Log.d(TAG, "Movie with gente => ${movieWithGenre}");
     }
 
     suspend fun getAllGenres() = withContext(Dispatchers.IO) {
