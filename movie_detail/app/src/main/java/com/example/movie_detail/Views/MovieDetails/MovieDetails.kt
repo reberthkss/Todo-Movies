@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,103 +18,91 @@ import com.example.movie_detail.databinding.MovieDetailsBinding
 
 class MovieDetails : Fragment() {
     lateinit var viewBinding: MovieDetailsBinding
-    private val theMovieDatabaseViewModel: TMDBViewModel by activityViewModels();
-    private var theMovieDbResourcesUrl: String? = null;
+    private val theMovieDatabaseViewModel: TMDBViewModel by activityViewModels()
+    private var theMovieDbResourcesUrl: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
-        configure();
-        bindObservers();
-        bindViews();
-        return viewBinding.root;
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
+    ): View {
+        viewBinding = MovieDetailsBinding.inflate(inflater, container, false)
+        configure()
+        bindObservers()
+        bindViews()
+        return viewBinding.root
     }
 
     override fun onResume() {
         super.onResume()
         try {
-            requestData();
+            requestData()
         } catch (e: Exception) {
-            Log.d("Fragment", "Error on request data => ${e.message}");
+            Log.d("Fragment", "Error on request data => ${e.message}")
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView();
-    }
 
-    fun configure() {
+    private fun configure() {
         theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY), requireContext(), "509")
     }
 
 
-    fun observeMovieDetails() {
-        theMovieDatabaseViewModel.getMovieDetail().removeObservers(viewLifecycleOwner);
+    private fun observeMovieDetails() {
+        theMovieDatabaseViewModel.getMovieDetail().removeObservers(viewLifecycleOwner)
         theMovieDatabaseViewModel.getMovieDetail().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 viewBinding.movieTitle = it.movie.movieTitle
-                viewBinding.votesCount = NumberFormatters.getFormatedNumber(it.movie.voteCount);
-                viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it.movie.popularity.toLong());
-                viewBinding.movieImageEndpoint = it.movie.movieImageUrl;
-                viewBinding.isFavorite = it.movie.isFavorite;
+                viewBinding.votesCount = NumberFormatters.getFormatedNumber(it.movie.voteCount)
+                viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it.movie.popularity.toLong())
+                viewBinding.movieImageEndpoint = it.movie.movieImageUrl
+                viewBinding.isFavorite = it.movie.isFavorite
             }
-        });
+        })
     }
 
-    fun observeSimilarMovies() {
-        theMovieDatabaseViewModel.getSimilarMovies().removeObservers(viewLifecycleOwner);
+    private fun observeSimilarMovies() {
+        theMovieDatabaseViewModel.getSimilarMovies().removeObservers(viewLifecycleOwner)
         theMovieDatabaseViewModel.getSimilarMovies().observe(viewLifecycleOwner, Observer {
             if (it != null && it.similarMovies.isNotEmpty()) {
                 viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(it.similarMovies, object: ISimilarMoviesAdapterCallbacks {
                     override fun onClickMovie(position: Int) {
-                        theMovieDatabaseViewModel.updateWatchedStatus(position);
-                        viewBinding.similarMoviesList.adapter?.notifyItemChanged(position);
+                        theMovieDatabaseViewModel.updateWatchedStatus(position)
+                        viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
                     }
                 })
             }
         })
     }
-    fun bindObservers() {
+    private fun bindObservers() {
 
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
-            theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL);
-        });
+            theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL)
+        })
 
         theMovieDatabaseViewModel.getFavoriteStatus().observe(viewLifecycleOwner, Observer {
-            viewBinding.isFavorite = it;
+            viewBinding.isFavorite = it
         })
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                viewBinding.shimmerViewContainer.startShimmerAnimation();
+                viewBinding.shimmerViewContainer.startShimmerAnimation()
             } else {
-                viewBinding.shimmerViewContainer.stopShimmerAnimation();
-                observeMovieDetails();
-                observeSimilarMovies();
-                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
+                viewBinding.shimmerViewContainer.stopShimmerAnimation()
+                observeMovieDetails()
+                observeSimilarMovies()
+                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!")
             }
-            viewBinding.isLoading = it;
+            viewBinding.isLoading = it
         })
     }
 
-    fun bindViews() {
+    private fun bindViews() {
         viewBinding.heartIcon.setOnClickListener {
-            theMovieDatabaseViewModel.updateFavoriteStatus();
+            theMovieDatabaseViewModel.updateFavoriteStatus()
         }
     }
 
-    fun requestData() {
-        theMovieDatabaseViewModel.loadMovieData();
+    private fun requestData() {
+        theMovieDatabaseViewModel.loadMovieData()
     }
 }
