@@ -20,7 +20,7 @@ This is a project that load the details from a specific movie, designed from a `
     
 
 ## Description
-I tried to apply everything i've known about Android, OOP and Relational databases since from my backgrounds (current place where i'm working, personal projects, university and [this](I tried to apply everything i've known about Android)) course of Udacity provided by Google.
+I tried to apply everything i've known about Android, OOP and Relational databases since from my backgrounds (current place where i'm working, personal projects, university and [this](https://classroom.udacity.com/courses/ud853) course of Udacity provided by Google).
 
 It uses the recommended architecture for Android Development:
  
