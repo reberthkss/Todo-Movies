@@ -92,14 +92,16 @@ class MovieDetails : Fragment() {
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                viewBinding.shimmerViewContainer.startShimmerAnimation()
+                viewBinding.shimmerViewContainer.startShimmerAnimation();
+                viewBinding.shimmerViewContainer.visibility = VISIBLE
+                viewBinding.movieDetailsRootContainer.visibility = GONE
             } else {
                 viewBinding.shimmerViewContainer.stopShimmerAnimation()
                 observeMovieDetails()
                 observeSimilarMovies()
-                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!")
+                viewBinding.shimmerViewContainer.visibility = GONE
+                viewBinding.movieDetailsRootContainer.visibility = VISIBLE
             }
-            viewBinding.isLoading = it
         })
     }
 

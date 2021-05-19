@@ -1,7 +1,6 @@
 package com.example.movie_detail.Repositories
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.movie_detail.Network.TMDBApi
 import com.example.movie_detail.Room.CrossReference.MovieAndGenreCf
@@ -12,7 +11,6 @@ import com.example.movie_detail.Room.Entities.Genre.GenreEntity
 import com.example.movie_detail.Room.Entities.Movie.MovieEntity
 import com.example.movie_detail.Room.Entities.Movie.SimilarMovieEntity
 import com.example.movie_detail.Room.Relations.MovieWithGenres
-import com.example.movie_detail.Room.Relations.MovieWithGenresAndSimilarMovies
 import com.example.movie_detail.Room.Relations.MovieWithSimilarMovies
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers

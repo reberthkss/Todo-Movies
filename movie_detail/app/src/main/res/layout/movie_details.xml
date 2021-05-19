@@ -56,7 +56,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone"
-            app:visibility="@{!isLoading ? `visible` : `gone`}"
             >
             <LinearLayout
                 android:id="@+id/movie_poster_container"
