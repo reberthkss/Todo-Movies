@@ -4,7 +4,7 @@
     xmlns:shimmer="http://schemas.android.com/tools">
     <data>
         <variable
-            name="isFavorite"
+            name="isWatched"
             type="Boolean"/>
         <variable
             name="movieTitle"
@@ -63,6 +63,7 @@
                     android:focusable="true"
                     android:visibility="visible"
                     app:tint="@android:color/white"
+                    app:visibility="@{isWatched ? `visible` : `gone`}"
                     />
             </LinearLayout>
             <LinearLayout

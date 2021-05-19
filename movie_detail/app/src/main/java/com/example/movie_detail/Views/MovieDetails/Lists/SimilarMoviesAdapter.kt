@@ -1,38 +1,30 @@
 package com.example.movie_detail.Views.MovieDetails.Lists
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movie_detail.Dataclasses.MovieDetailsDataclasse
+import com.example.movie_detail.Room.Relations.SimilarMovieWithGenre
 import com.example.movie_detail.databinding.MovieDetailsRecViewItemAdapterBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
 
-class SimilarMoviesAdapter(val similarMovies: List<MovieDetailsDataclasse>, val callbacks: ISimilarMoviesAdapterCallbacks): RecyclerView.Adapter<SimilarMoviesAdapter.ViewHolder>() {
+class SimilarMoviesAdapter(val similarMovies: List<SimilarMovieWithGenre>, val callbacks: ISimilarMoviesAdapterCallbacks): RecyclerView.Adapter<SimilarMoviesAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: MovieDetailsRecViewItemAdapterBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(movieDetail: MovieDetailsDataclasse, position: Int) {
+        fun bind(movieDetail: SimilarMovieWithGenre, position: Int) {
             val releaseDateFormatter = DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd[ [HH][:mm][:ss][.SSS]]")
                     .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                     .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
                     .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
                     .toFormatter()
             val releaseYearFormatter = DateTimeFormatter.ofPattern("yyyy");
-            val releaseDate = if (movieDetail.releaseDate.isNotEmpty()) LocalDate.parse(movieDetail.releaseDate, releaseDateFormatter) else LocalDate.now();
-            binding.movieTitle = movieDetail.title;
-            binding.movieDescription = releaseDate.format(releaseYearFormatter) + " " + movieDetail.genres.map {it.name}.reduce {acc, genre -> "${acc}, ${genre}"};
-            binding.movieImageUrl = movieDetail.imageUrl;
-            binding.isFavorite = movieDetail.alreadyWatched;
+            val releaseDate = if (movieDetail.similarMovie.releaseDate.isNotEmpty()) LocalDate.parse(movieDetail.similarMovie.releaseDate, releaseDateFormatter) else LocalDate.now();
+            binding.movieTitle = movieDetail.similarMovie.movieTitle;
+            binding.movieDescription = releaseDate.format(releaseYearFormatter) + " " + movieDetail.genres.map {it.genreName}.reduce {acc, genre -> "${acc}, ${genre}"};
+            binding.movieImageUrl = movieDetail.similarMovie.movieImageUrl;
+            binding.isWatched = movieDetail.similarMovie.isWatched;
 
-            if (movieDetail.alreadyWatched) {
-                binding.checkedIcon.visibility = VISIBLE;
-            } else {
-                binding.checkedIcon.visibility = GONE;
-            }
             binding.movieCardContainer.setOnClickListener {
                 callbacks.onClickMovie(position);
             }

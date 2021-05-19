@@ -20,102 +20,98 @@ import com.example.movie_detail.databinding.MovieDetailsBinding
 
 class MovieDetails : Fragment() {
     lateinit var viewBinding: MovieDetailsBinding
-    private val theMovieDatabaseViewModel: TMDBViewModel by activityViewModels();
-    private var theMovieDbResourcesUrl: String? = null;
+    private val theMovieDatabaseViewModel: TMDBViewModel by activityViewModels()
+    private var theMovieDbResourcesUrl: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        viewBinding = MovieDetailsBinding.inflate(inflater, container, false);
-        configure();
-        bindObservers();
-        bindViews();
-        return viewBinding.root;
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
+    ): View {
+        viewBinding = MovieDetailsBinding.inflate(inflater, container, false)
+        configure()
+        bindObservers()
+        bindViews()
+        return viewBinding.root
     }
 
     override fun onResume() {
         super.onResume()
         try {
-            requestData();
+            requestData()
         } catch (e: Exception) {
-            // Display message and try to show the movie detail data
-            val movieOverview = theMovieDatabaseViewModel.getMovieDetails().value;
-            val availableData = movieOverview?.movieDetails != null;
-            if (availableData) {
-                viewBinding.noAvailableDataContainer.visibility = GONE;
-                viewBinding.movieDetailsRootContainer.visibility = VISIBLE;
-            } else {
-                viewBinding.noAvailableDataContainer.visibility = VISIBLE;
-                viewBinding.movieDetailsRootContainer.visibility = GONE;
-            }
-            Feedback.displaySnackBar(viewBinding.root, e.message.toString());
+            Log.d("Fragment", "Error on request data => ${e.message}")
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+
+    private fun configure() {
+        theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY), requireContext(), "509")
     }
 
-    fun configure() {
-        theMovieDatabaseViewModel.configure(getString(R.string.THE_MOVIE_DB_BASE_URL), getString(R.string.THE_MOVIE_DB_API_KEY));
-    }
 
-    fun bindObservers() {
-        theMovieDatabaseViewModel.getMovieDetails().observe(viewLifecycleOwner, Observer {
-            val similarMovies = it?.similarMovies ?: listOf();
-            val votesCount: Long = it?.movieDetails?.voteCount?.toLong() ?: 0L;
-            val popularity: Long = it?.movieDetails?.popularity?.toLong() ?: 0L;
-            viewBinding.movieTitle = it?.movieDetails?.title;
-            viewBinding.votesCount = NumberFormatters.getFormatedNumber(votesCount);
-            viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(popularity);
-            viewBinding.movieImageEndpoint = it?.movieDetails?.imageUrl;
-            viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(similarMovies, object: ISimilarMoviesAdapterCallbacks {
-                override fun onClickMovie(position: Int) {
-                    theMovieDatabaseViewModel.updateWatchedStatus(position);
-                    viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
-                }
-            });
+    private fun observeMovieDetails() {
+        theMovieDatabaseViewModel.getMovieDetail().removeObservers(viewLifecycleOwner)
+        theMovieDatabaseViewModel.getMovieDetail().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                Feedback.displaySnackBar(viewBinding.root, "Dados carregados com sucesso!");
+                viewBinding.movieTitle = it.movie.movieTitle
+                viewBinding.votesCount = NumberFormatters.getFormatedNumber(it.movie.voteCount)
+                viewBinding.moviePopularity = NumberFormatters.getFormatedNumber(it.movie.popularity.toLong())
+                viewBinding.movieImageEndpoint = it.movie.movieImageUrl
+                viewBinding.isFavorite = it.movie.isFavorite
+                viewBinding.noAvailableDataContainer.visibility = GONE
+                viewBinding.movieDetailsRootContainer.visibility = VISIBLE
+            } else {
+                viewBinding.noAvailableDataContainer.visibility = VISIBLE
+                viewBinding.movieDetailsRootContainer.visibility = GONE
             }
-        });
+        })
+    }
+
+    private fun observeSimilarMovies() {
+        theMovieDatabaseViewModel.getSimilarMovies().removeObservers(viewLifecycleOwner)
+        theMovieDatabaseViewModel.getSimilarMovies().observe(viewLifecycleOwner, Observer {
+            if (it != null && it.similarMovies.isNotEmpty()) {
+                viewBinding.similarMoviesList.adapter = SimilarMoviesAdapter(it.similarMovies, object: ISimilarMoviesAdapterCallbacks {
+                    override fun onClickMovie(position: Int) {
+                        theMovieDatabaseViewModel.updateWatchedStatus(position)
+                        viewBinding.similarMoviesList.adapter?.notifyItemChanged(position)
+                    }
+                })
+            }
+        })
+    }
+    private fun bindObservers() {
 
         theMovieDatabaseViewModel.getResourceServerConfig().observe(viewLifecycleOwner, Observer {
-            theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL);
-        });
+            theMovieDbResourcesUrl = it?.images?.baseUrl ?: getString(R.string.THE_MOVIE_DB_DEFAULT_RESOURCES_BASE_URL)
+        })
 
         theMovieDatabaseViewModel.getFavoriteStatus().observe(viewLifecycleOwner, Observer {
-            viewBinding.isFavorite = it;
+            viewBinding.isFavorite = it
         })
 
         theMovieDatabaseViewModel.getLoadingStatus().observe(viewLifecycleOwner, Observer {
-            if (it) {
+            if (it == true) {
                 viewBinding.shimmerViewContainer.startShimmerAnimation();
+                viewBinding.shimmerViewContainer.visibility = VISIBLE
+                viewBinding.movieDetailsRootContainer.visibility = GONE
             } else {
-                viewBinding.shimmerViewContainer.stopShimmerAnimation();
+                viewBinding.shimmerViewContainer.stopShimmerAnimation()
+                observeMovieDetails()
+                observeSimilarMovies()
+                viewBinding.shimmerViewContainer.visibility = GONE
+                viewBinding.movieDetailsRootContainer.visibility = VISIBLE
             }
-            viewBinding.isLoading = it;
         })
     }
 
-    fun bindViews() {
+    private fun bindViews() {
         viewBinding.heartIcon.setOnClickListener {
-            theMovieDatabaseViewModel.updateFavoriteStatus();
+            theMovieDatabaseViewModel.updateFavoriteStatus()
         }
     }
 
-    fun requestData() {
-        theMovieDatabaseViewModel.loadResourcesServerConfig();
-        theMovieDatabaseViewModel.loadDataOfMovieId("509");
+    private fun requestData() {
+        theMovieDatabaseViewModel.loadMovieData()
     }
 }
